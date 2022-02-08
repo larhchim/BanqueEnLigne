@@ -31,6 +31,8 @@ public class Compte implements Serializable {
 
     private BigDecimal soldeCompte;
 
+    private String motDePasse;
+
     @Enumerated(EnumType.STRING)
     private TypeCompte typeCompte;
 
@@ -48,12 +50,14 @@ public class Compte implements Serializable {
     @OneToMany(mappedBy = "compteCredit")
     private List<Credits> creditsList = new ArrayList<>();
 
-    public Compte(Long numeroCompte, boolean etatCompte, Date dateCreation, BigDecimal soldeCompte, TypeCompte typeCompte) {
+
+    public Compte(Long numeroCompte, boolean etatCompte, Date dateCreation, BigDecimal soldeCompte, TypeCompte typeCompte , String motDePasse) {
         this.numeroCompte = numeroCompte;
         this.etatCompte = etatCompte;
         this.dateCreation = dateCreation;
         this.soldeCompte = soldeCompte;
         this.typeCompte = typeCompte;
+        this.motDePasse = motDePasse;
     }
 
     public Compte(){
@@ -81,6 +85,14 @@ public class Compte implements Serializable {
 
     public void setDateCreation(Date dateCreation) {
         this.dateCreation = dateCreation;
+    }
+
+    public String getMotDePasse() {
+        return motDePasse;
+    }
+
+    public void setMotDePasse(String motDePasse) {
+        this.motDePasse = motDePasse;
     }
 
     public BigDecimal getSoldeCompte() {
