@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class CreditConsommation extends CreditAbstraction{
 
+    public CreditConsommation() {
+        credit = Credits.Credit.CONSOMMATION;
+    }
+
     @Override
     Credits createCredit(Credits credits, Compte compte) {
         return null;

@@ -6,6 +6,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class CompteCourant extends CompteAbstraction{
 
+    public CompteCourant() {
+        typeCompte = Compte.TypeCompte.COURANT;
+    }
+
     @Override
     Compte createAccount(Compte compte) {
         return null;

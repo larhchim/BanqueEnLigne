@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class CreditImmobilier extends CreditAbstraction{
 
+    public CreditImmobilier() {
+        credit = Credits.Credit.IMMOBILIER;
+    }
+
     @Override
     Credits createCredit(Credits credits, Compte compte) {
         return null;
