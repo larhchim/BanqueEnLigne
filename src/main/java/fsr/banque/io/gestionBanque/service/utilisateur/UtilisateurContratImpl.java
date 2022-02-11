@@ -2,9 +2,11 @@ package fsr.banque.io.gestionBanque.service.utilisateur;
 
 import fsr.banque.io.gestionBanque.models.Utilisateur;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UtilisateurContratImpl implements UtilisateurContrat{
 
     @Override

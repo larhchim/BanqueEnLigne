@@ -5,7 +5,7 @@ import fsr.banque.io.gestionBanque.models.Retrait;
 
 import java.util.List;
 
-public interface ReraitContrat {
+public interface RetraitContrat {
 
     Retrait createNewRetrait(Retrait retrait, Compte compte);
 

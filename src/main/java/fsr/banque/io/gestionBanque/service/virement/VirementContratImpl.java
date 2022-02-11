@@ -2,9 +2,11 @@ package fsr.banque.io.gestionBanque.service.virement;
 
 import fsr.banque.io.gestionBanque.models.Virement;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class VirementContratImpl implements VirementContrat{
 
     @Override
