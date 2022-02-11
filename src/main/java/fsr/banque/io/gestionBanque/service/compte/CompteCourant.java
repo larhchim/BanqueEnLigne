@@ -1,6 +1,8 @@
 package fsr.banque.io.gestionBanque.service.compte;
 
-public class CompteCourant extends Compte{
+import fsr.banque.io.gestionBanque.models.Compte;
+
+public class CompteCourant extends CompteAbstraction{
 
     @Override
     Compte createAccount(Compte compte) {

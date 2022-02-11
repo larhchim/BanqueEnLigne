@@ -15,7 +15,7 @@ import java.util.List;
 public class Compte implements Serializable {
 
     public enum TypeCompte {
-        EPARGNE,COURANT,AUTRE;
+        EPARGNE,COURANT;
     };
 
     @Id

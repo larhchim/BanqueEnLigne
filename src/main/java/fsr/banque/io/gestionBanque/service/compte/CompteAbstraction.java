@@ -1,17 +1,18 @@
 package fsr.banque.io.gestionBanque.service.compte;
 
+import fsr.banque.io.gestionBanque.models.Compte;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-public abstract class Compte implements CompteContrat{
+public abstract class CompteAbstraction implements CompteContrat{
 
     fsr.banque.io.gestionBanque.models.Compte.TypeCompte typeCompte;
 
     abstract Compte createAccount(Compte compte);
 
     @Override
-    public Page<Compte> findCompteParMotCle(String mc, Long aId, int numero, int size) {
+    public Page<Compte> findCompteParMotCle(String mc, Long aId, int page, int size) {
         return null;
     }
 
