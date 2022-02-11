@@ -5,7 +5,7 @@ import fsr.banque.io.gestionBanque.models.Retrait;
 
 import java.util.List;
 
-public class RetraitContratImpl implements ReraitConrat{
+public class RetraitContratImpl implements ReraitContrat {
 
     @Override
     public Retrait createNewRetrait(Retrait retrait, Compte compte) {
