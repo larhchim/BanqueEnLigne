@@ -2,53 +2,40 @@ package fsr.banque.io.gestionBanque.service.compte;
 
 import fsr.banque.io.gestionBanque.models.Compte;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FabriqueCompteImpl implements FabriqueCompte{
 
-    private CompteCourant compteCourant;
-    private CompteEpargne compteEpargne;
-    private CompteAdmin compteAdmin;
+
+    private ApplicationContext applicationContext;
 
     @Autowired
-    public void setCompteAdmin(CompteAdmin compteAdmin) {
-        this.compteAdmin = compteAdmin;
-    }
-
-    @Autowired
-    public void setCompteCourant(CompteCourant compteCourant) {
-        this.compteCourant = compteCourant;
-    }
-
-    @Autowired
-    public void setCompteEpargne(CompteEpargne compteEpargne) {
-        this.compteEpargne = compteEpargne;
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
     @Override
-    public void generateAccount(Compte.TypeCompte typeCompte,Compte cmpt,Long userId) {
+    public CompteAbstraction generateAccount(Compte.TypeCompte typeCompte) {
 
         CompteAbstraction compte;
 
         switch (typeCompte){
             case COURANT:
-                compteCourant.createAccount(cmpt,userId);
-               // compte = compteCourant;
+                compte = applicationContext.getBean(CompteCourant.class);
                 break;
             case EPARGNE:
-                compteEpargne.createAccount(cmpt,userId);
-              //  compte = compteEpargne;
+                compte = applicationContext.getBean(CompteEpargne.class);
                 break;
             case ADMIN:
-                compteAdmin.createAccount(cmpt,userId);
-             //   compte = compteAdmin;
+                compte = applicationContext.getBean(CompteAdmin.class);
                 break;
             default:
                 throw new IllegalArgumentException("Veuillez specifier le type de compte");
         }
 
-       // return compte;
+       return compte;
 
     }
 

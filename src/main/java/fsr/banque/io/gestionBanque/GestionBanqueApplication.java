@@ -3,8 +3,7 @@ package fsr.banque.io.gestionBanque;
 import fsr.banque.io.gestionBanque.dao.UtilisateurDAO;
 import fsr.banque.io.gestionBanque.models.Compte;
 import fsr.banque.io.gestionBanque.models.Utilisateur;
-import fsr.banque.io.gestionBanque.service.compte.CompteAbstraction;
-import fsr.banque.io.gestionBanque.service.compte.FabriqueCompte;
+import fsr.banque.io.gestionBanque.service.compte.*;
 import fsr.banque.io.gestionBanque.service.utilisateur.UtilisateurContrat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -78,7 +77,7 @@ public class GestionBanqueApplication {
 		/***
 		 * Creating Bank accounts with the above users
 		 */
-
+/*
 		Compte compte = new Compte();
 
 		compte.setEtatCompte(true);
@@ -86,7 +85,10 @@ public class GestionBanqueApplication {
 		compte.setDateCreation(new Date());
 		compte.setMotDePasse(getBCR().encode("123456789"));
 
-		fabriqueCompte.generateAccount(Compte.TypeCompte.EPARGNE,compte,user.findUserByEmail("larhchim_zakaria@gmail.com").getIdUtilisateur());
+		CompteEpargne c = (CompteEpargne) fabriqueCompte.generateAccount(Compte.TypeCompte.EPARGNE);
+        c.createAccount(compte,user.findUserByEmail("larhchim_zakaria@gmail.com").getIdUtilisateur());
+*/
+
 
 /*
 		Compte compte1 = new Compte();
@@ -96,7 +98,11 @@ public class GestionBanqueApplication {
 		compte1.setDateCreation(new Date());
 		compte1.setMotDePasse(getBCR().encode("789456123"));
 
-		fabriqueCompte.generateAccount(Compte.TypeCompte.COURANT,compte1,user.findUserByEmail("jadid_ismail@gmail.com").getIdUtilisateur());
+
+
+		CompteCourant d = (CompteCourant) fabriqueCompte.generateAccount(Compte.TypeCompte.COURANT);
+		d.createAccount(compte1,user.findUserByEmail("jadid_ismail@gmail.com").getIdUtilisateur());
+
 
 
 		Compte compte2 = new Compte();
@@ -106,7 +112,8 @@ public class GestionBanqueApplication {
 		compte2.setDateCreation(new Date());
 		compte2.setMotDePasse(getBCR().encode("456123789"));
 
-		fabriqueCompte.generateAccount(Compte.TypeCompte.ADMIN,compte2,user.findUserByEmail("fihri_fatima@gmail.com").getIdUtilisateur());
+		CompteAdmin e = (CompteAdmin) fabriqueCompte.generateAccount(Compte.TypeCompte.ADMIN);
+		e.createAccount(compte2,user.findUserByEmail("fihri_fatima@gmail.com").getIdUtilisateur());
 
 */
 

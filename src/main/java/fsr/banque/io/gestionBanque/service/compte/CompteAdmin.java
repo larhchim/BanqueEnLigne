@@ -30,7 +30,7 @@ public class CompteAdmin extends CompteAbstraction{
 
     @Transactional
     @Override
-    Compte createAccount(Compte compte,Long userId) {
+    public Compte createAccount(Compte compte,Long userId) {
 
         compte.setTypeCompte(typeCompte);
         Utilisateur utilisateur = user.findTheUser(userId);

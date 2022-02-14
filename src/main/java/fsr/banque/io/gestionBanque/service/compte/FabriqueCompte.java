@@ -4,6 +4,6 @@ import fsr.banque.io.gestionBanque.models.Compte;
 
 public interface FabriqueCompte {
 
-    void generateAccount(fsr.banque.io.gestionBanque.models.Compte.TypeCompte typeCompte,Compte compte,Long userId);
+    CompteAbstraction generateAccount(Compte.TypeCompte typeCompte);
 
 }
