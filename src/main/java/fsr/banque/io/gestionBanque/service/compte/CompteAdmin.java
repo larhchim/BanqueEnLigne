@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class CompteEpargne extends CompteAbstraction{
+public class CompteAdmin extends CompteAbstraction{
 
     private CompteDAO cptDAO;
     private UtilisateurContrat user;
@@ -24,17 +24,17 @@ public class CompteEpargne extends CompteAbstraction{
         this.cptDAO = cptDAO;
     }
 
-    public CompteEpargne() {
-        typeCompte = Compte.TypeCompte.EPARGNE;
+    public CompteAdmin() {
+        typeCompte = Compte.TypeCompte.ADMIN;
     }
 
     @Transactional
     @Override
-    Compte createAccount(Compte compte, Long userId) {
+    Compte createAccount(Compte compte,Long userId) {
 
+        compte.setTypeCompte(typeCompte);
         Utilisateur utilisateur = user.findTheUser(userId);
         compte.setUtilisateur(utilisateur);
-        compte.setTypeCompte(typeCompte);
 
         return cptDAO.save(compte);
 

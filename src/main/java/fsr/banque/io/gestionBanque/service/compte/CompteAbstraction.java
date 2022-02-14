@@ -1,29 +1,49 @@
 package fsr.banque.io.gestionBanque.service.compte;
 
+import fsr.banque.io.gestionBanque.dao.CompteDAO;
 import fsr.banque.io.gestionBanque.models.Compte;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public abstract class CompteAbstraction implements CompteContrat{
 
+    private CompteDAO compteDAO;
+
+    @Autowired
+    public void setCompteDAO(CompteDAO compteDAO) {
+        this.compteDAO = compteDAO;
+    }
+
     fsr.banque.io.gestionBanque.models.Compte.TypeCompte typeCompte;
 
-    abstract Compte createAccount(Compte compte);
+    abstract Compte createAccount(Compte compte,Long userId);
 
+    @Transactional
     @Override
     public Page<Compte> findCompteParMotCle(String mc, Long aId, int page, int size) {
-        return null;
+        return compteDAO.findCompteParMotCle(mc,aId, PageRequest.of(page, size));
     }
 
+    @Transactional
     @Override
     public Compte updateAccount(Compte compte, Long aId) {
-        return null;
+        compte.setNumeroCompte(aId);
+        return compteDAO.save(compte);
     }
 
+    @Transactional
     @Override
     public List<Compte> allAccounts() {
-        return null;
+        return compteDAO.findAll();
     }
 
+    @Transactional
+    @Override
+    public Compte findLeCompte(Long id) {
+        return compteDAO.getById(id);
+    }
 }

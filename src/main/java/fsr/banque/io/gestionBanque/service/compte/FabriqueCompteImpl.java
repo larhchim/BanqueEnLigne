@@ -9,6 +9,12 @@ public class FabriqueCompteImpl implements FabriqueCompte{
 
     private CompteCourant compteCourant;
     private CompteEpargne compteEpargne;
+    private CompteAdmin compteAdmin;
+
+    @Autowired
+    public void setCompteAdmin(CompteAdmin compteAdmin) {
+        this.compteAdmin = compteAdmin;
+    }
 
     @Autowired
     public void setCompteCourant(CompteCourant compteCourant) {
@@ -21,21 +27,29 @@ public class FabriqueCompteImpl implements FabriqueCompte{
     }
 
     @Override
-    public CompteAbstraction generateAccount(Compte.TypeCompte typeCompte) {
+    public void generateAccount(Compte.TypeCompte typeCompte,Compte cmpt,Long userId) {
 
         CompteAbstraction compte;
 
         switch (typeCompte){
             case COURANT:
-                compte = compteCourant;
+                compteCourant.createAccount(cmpt,userId);
+               // compte = compteCourant;
                 break;
             case EPARGNE:
-                compte = compteEpargne;
+                compteEpargne.createAccount(cmpt,userId);
+              //  compte = compteEpargne;
+                break;
+            case ADMIN:
+                compteAdmin.createAccount(cmpt,userId);
+             //   compte = compteAdmin;
                 break;
             default:
                 throw new IllegalArgumentException("Veuillez specifier le type de compte");
         }
-        return compte;
+
+       // return compte;
+
     }
 
 }

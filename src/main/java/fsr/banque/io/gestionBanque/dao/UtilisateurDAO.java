@@ -14,4 +14,6 @@ public interface UtilisateurDAO extends JpaRepository<Utilisateur,Long> {
     @Query("SELECT c from Utilisateur c where c.emailUtilisateur LIKE :x or c.nomUtilisateur LIKE :x or c.prenomUtilisateur LIKE :x")
     public Page<Utilisateur> FindUtilisateurParMotCle(@Param("x") String mc, Pageable pageable);
 
+    Utilisateur findUtilisateurByEmailUtilisateur(String email);
+
 }

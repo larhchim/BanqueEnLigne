@@ -15,4 +15,8 @@ public interface UtilisateurContrat {
 
      List<Utilisateur> allUsers();
 
+     Utilisateur findTheUser(Long userId);
+
+     Utilisateur findUserByEmail(String email);
+
 }
