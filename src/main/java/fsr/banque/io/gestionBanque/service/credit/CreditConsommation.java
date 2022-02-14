@@ -4,6 +4,8 @@ import fsr.banque.io.gestionBanque.models.Compte;
 import fsr.banque.io.gestionBanque.models.Credits;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class CreditConsommation extends CreditAbstraction{
 
@@ -13,6 +15,9 @@ public class CreditConsommation extends CreditAbstraction{
 
     @Override
     Credits createCredit(Credits credits, Compte compte) {
+        credits.setCompteCredit(compte);
+        credits.setDateCredit(new Date());
+        credits.setTypeCredit(credit);
         return null;
     }
 

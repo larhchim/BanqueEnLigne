@@ -2,22 +2,17 @@ package fsr.banque.io.gestionBanque.service.credit;
 
 import fsr.banque.io.gestionBanque.models.Credits;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FabriqueCreditImpl implements FabriqueCredit{
 
-    private CreditImmobilier creditImmobilier;
-    private CreditConsommation creditConsommation;
+    private ApplicationContext applicationContext;
 
     @Autowired
-    public void setCreditConsommation(CreditConsommation creditConsommation) {
-        this.creditConsommation = creditConsommation;
-    }
-
-    @Autowired
-    public void setCreditImmobilier(CreditImmobilier creditImmobilier) {
-        this.creditImmobilier = creditImmobilier;
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -27,10 +22,10 @@ public class FabriqueCreditImpl implements FabriqueCredit{
 
         switch (credit){
             case IMMOBILIER:
-                creditAbstraction = creditImmobilier;
+                creditAbstraction = applicationContext.getBean(CreditImmobilier.class);
                 break;
             case CONSOMMATION:
-                creditAbstraction = creditConsommation;
+                creditAbstraction = applicationContext.getBean(CreditConsommation.class);
                 break;
             default:
                 throw new IllegalArgumentException("Veuillez choisir un type de credit valide");

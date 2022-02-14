@@ -22,9 +22,8 @@ public class Retrait implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date dateRetrait;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "numeroCompte")
-    @JsonIgnore
     private Compte compteRetrait;
 
     public Retrait(Long idRetrait, BigDecimal montantRetrait, Date dateRetrait) {

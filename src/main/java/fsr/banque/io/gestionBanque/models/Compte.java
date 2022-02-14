@@ -135,4 +135,15 @@ public class Compte implements Serializable {
         this.retraitList = retraitList;
     }
 
+    @Override
+    public String toString() {
+        return "Compte{" +
+                "numeroCompte=" + numeroCompte +
+                ", etatCompte=" + etatCompte +
+                ", dateCreation=" + dateCreation +
+                ", soldeCompte=" + soldeCompte +
+                ", motDePasse='" + motDePasse + '\'' +
+                ", typeCompte=" + typeCompte +
+                '}';
+    }
 }

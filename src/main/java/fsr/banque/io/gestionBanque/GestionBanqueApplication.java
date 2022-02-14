@@ -2,10 +2,13 @@ package fsr.banque.io.gestionBanque;
 
 import fsr.banque.io.gestionBanque.dao.UtilisateurDAO;
 import fsr.banque.io.gestionBanque.models.Compte;
+import fsr.banque.io.gestionBanque.models.Retrait;
 import fsr.banque.io.gestionBanque.models.Utilisateur;
 import fsr.banque.io.gestionBanque.service.compte.*;
+import fsr.banque.io.gestionBanque.service.retrait.RetraitContrat;
 import fsr.banque.io.gestionBanque.service.utilisateur.UtilisateurContrat;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -23,6 +26,18 @@ public class GestionBanqueApplication {
 
 	private UtilisateurContrat user;
 	private FabriqueCompte fabriqueCompte;
+	private CompteContrat compteContrat;
+	private RetraitContrat retraitContrat;
+
+	@Autowired
+	public void setRetraitContrat(RetraitContrat retraitContrat) {
+		this.retraitContrat = retraitContrat;
+	}
+
+	@Autowired
+	public void setCompteContrat(CompteContrat compteContrat) {
+		this.compteContrat = compteContrat;
+	}
 
 	@Autowired
 	public void setFabriqueCompte(FabriqueCompte fabriqueCompte) {
@@ -116,6 +131,45 @@ public class GestionBanqueApplication {
 		e.createAccount(compte2,user.findUserByEmail("fihri_fatima@gmail.com").getIdUtilisateur());
 
 */
+
+		/*Utilisateur utilisateur2 = new Utilisateur();
+
+		utilisateur2.setSexeUtilisateur(Utilisateur.Gender.FEMALE);
+		utilisateur2.setNomUtilisateur("SALHI");
+		utilisateur2.setPrenomUtilisateur("KARIMA");
+		utilisateur2.setEmailUtilisateur("salhi_karima@gmail.com");
+		user.saveUser(utilisateur2);
+
+		Compte compte2 = new Compte();
+
+		compte2.setEtatCompte(true);
+		compte2.setSoldeCompte(new BigDecimal("78500"));
+		compte2.setDateCreation(new Date());
+		compte2.setMotDePasse(getBCR().encode("456123789"));
+
+		CompteCourant e = (CompteCourant) fabriqueCompte.generateAccount(Compte.TypeCompte.COURANT);
+		e.createAccount(compte2,user.findUserByEmail("salhi_karima@gmail.com").getIdUtilisateur());
+*/
+		/*long value = Long.valueOf(90314487);
+		System.out.println(value);
+		Compte compte =compteContrat.findLeCompte(value);
+		System.out.println("Lazy: "+compte.toString());
+
+		for (Compte c:compteContrat.allAccounts()) {
+			System.out.println(c.toString());
+
+		}*/
+		try {
+			Retrait retrait = new Retrait();
+			retrait.setDateRetrait(new Date());
+			retrait.setMontantRetrait(new BigDecimal(1));
+			retrait.setCompteRetrait(compteContrat.findLeCompte(Long.valueOf("90314587")));
+
+			retraitContrat.createNewRetrait(retrait);
+		}catch (Exception e){
+			e.printStackTrace();
+			System.out.println(e);
+		}
 
 
 	}
