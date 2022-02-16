@@ -8,8 +8,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Couche DAO Compte pour les appels BDD
+ */
+
 @Repository
 public interface CompteDAO extends JpaRepository<Compte,Long> {
+
+    /***
+     *
+     * @param mc1 premier mot cle
+     * @param mc2 deuxieme mot cle
+     * @param pageable controle de la page de retour filtré
+     * @return une page des comptes avec pagination
+     */
 
     @Query("select c from Compte c where (c.utilisateur.emailUtilisateur LIKE :x or c.utilisateur.nomUtilisateur LIKE :x or c.utilisateur.prenomUtilisateur LIKE :x or c.numeroCompte  =:y) and c.etatCompte = true ")
     Page<Compte> findCompteParMotCle(@Param("x") String mc1,@Param("y") Long mc2,Pageable pageable);

@@ -5,6 +5,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entité JPA Utilisateur
+ */
+
 @Entity
 @Table(name = "Utilisateur")
 public class Utilisateur implements Serializable {
@@ -30,6 +34,15 @@ public class Utilisateur implements Serializable {
 
     @OneToMany(mappedBy = "utilisateur")
     private List<Compte> compteList = new ArrayList<>();
+
+    /**
+     * Constructeur Utilisateur
+     * @param idUtilisateur
+     * @param nomUtilisateur
+     * @param prenomUtilisateur
+     * @param emailUtilisateur
+     * @param sexeUtilisateur
+     */
 
     public Utilisateur(Long idUtilisateur, String nomUtilisateur, String prenomUtilisateur, String emailUtilisateur, Gender sexeUtilisateur) {
         this.idUtilisateur = idUtilisateur;

@@ -7,6 +7,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * Entité JPA Virement
+ */
+
 @Entity
 @Table(name = "Virement")
 public class Virement implements Serializable {
@@ -28,6 +32,14 @@ public class Virement implements Serializable {
     @JoinColumn(name = "numeroCompteEmetteur")
     @JsonIgnore
     private Compte compteVirement;
+
+    /**
+     * Constructeur Virement
+     * @param idVirement
+     * @param numeroCompteRecepteur
+     * @param montant
+     * @param dateVirement
+     */
 
     public Virement(Long idVirement, Long numeroCompteRecepteur, BigDecimal montant, Date dateVirement) {
         this.idVirement = idVirement;

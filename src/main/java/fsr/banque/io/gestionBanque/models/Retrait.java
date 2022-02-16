@@ -7,6 +7,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * Entité JPA Retrait
+ */
+
 @Entity
 @Table(name = "Retrait")
 public class Retrait implements Serializable {
@@ -25,6 +29,13 @@ public class Retrait implements Serializable {
     @ManyToOne
     @JoinColumn(name = "numeroCompte")
     private Compte compteRetrait;
+
+    /**
+     * Constructeur Retrait
+     * @param idRetrait
+     * @param montantRetrait
+     * @param dateRetrait
+     */
 
     public Retrait(Long idRetrait, BigDecimal montantRetrait, Date dateRetrait) {
         this.idRetrait = idRetrait;

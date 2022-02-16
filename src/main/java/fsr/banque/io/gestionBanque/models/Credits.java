@@ -7,6 +7,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * Entité JPA Credits
+ */
+
 @Entity
 @Table(name = "Credits")
 public class Credits implements Serializable {
@@ -41,6 +45,18 @@ public class Credits implements Serializable {
     @JoinColumn(name = "numeroCompte")
     @JsonIgnore
     private Compte compteCredit;
+
+    /**
+     * Constructeur Credit
+     * @param idCredit
+     * @param montantCredit
+     * @param dateCredit
+     * @param mensualite
+     * @param typeCredit
+     * @param nombreMensualitesCredit
+     * @param montantReste
+     * @param montantReglee
+     */
 
     public Credits(Long idCredit, BigDecimal montantCredit, Date dateCredit, BigDecimal mensualite, Credit typeCredit, Long nombreMensualitesCredit, BigDecimal montantReste, BigDecimal montantReglee) {
         this.idCredit = idCredit;

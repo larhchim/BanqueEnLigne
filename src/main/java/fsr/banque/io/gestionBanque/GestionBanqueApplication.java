@@ -180,8 +180,8 @@ public class GestionBanqueApplication {
 			System.out.println(c.toString());
 
 		}*/
-/*
-		try {
+
+		/*try {
 			Retrait retrait = new Retrait();
 			retrait.setDateRetrait(new Date());
 			retrait.setMontantRetrait(new BigDecimal(1));
@@ -191,13 +191,17 @@ public class GestionBanqueApplication {
 		}catch (Exception e){
 			e.printStackTrace();
 			System.out.println(e);
-		}
-*/
+		}*/
+
 		/*CreditConsommation cc = (CreditConsommation) fabriqueCredit.generateCredit(Credits.Credit.CONSOMMATION);
 		Credits cd = new Credits();
 		cd.setNombreMensualitesCredit(Long.valueOf(24));
 		cd.setMontantCredit(BigDecimal.valueOf(50000));
-		cc.createCredit(cd,compteContrat.findLeCompte(Long.valueOf("90314587")));*/
+		try {
+			cc.createCredit(cd,compteContrat.findLeCompte(Long.valueOf("90314587")));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}*/
 
 		/*CreditImmobilier cc = (CreditImmobilier) fabriqueCredit.generateCredit(Credits.Credit.IMMOBILIER);
 		Credits cd = new Credits();
@@ -211,9 +215,9 @@ public class GestionBanqueApplication {
 			e.printStackTrace();
 		}
 */
-/*
-		Long emetteur = Long.valueOf(90314587);
-		Long recepteur = Long.valueOf(90314538);
+
+		/*Long emetteur = Long.valueOf(90314538);
+		Long recepteur = Long.valueOf(90314587);
 		Virement virement = new Virement();
 		virement.setMontant(BigDecimal.valueOf(6703.97));
 
@@ -221,8 +225,14 @@ public class GestionBanqueApplication {
 			virementContrat.createNewVirement(virement,emetteur,recepteur);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-*/
+		}*/
+
+
+		/*try {
+			System.out.println(compteContrat.findLeCompte(Long.valueOf(90314587)).toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}*/
 
 
 	}

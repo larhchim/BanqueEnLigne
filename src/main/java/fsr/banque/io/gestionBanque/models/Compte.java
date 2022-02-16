@@ -10,13 +10,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Entité JPA Compte
+ */
+
 @Entity
 @Table(name = "Compte")
 public class Compte implements Serializable {
 
+    /**
+     * Enumeration Type Compte qui presente Trois possibilités de creation de comptes
+     */
+
     public enum TypeCompte {
         EPARGNE,COURANT,ADMIN;
     };
+
 
     @Id
     @TableGenerator(name = "ACCOUNT_GEN",
@@ -50,6 +59,15 @@ public class Compte implements Serializable {
     @OneToMany(mappedBy = "compteCredit")
     private List<Credits> creditsList = new ArrayList<>();
 
+    /**
+     * Constructeur de l'entité Compte
+     * @param numeroCompte
+     * @param etatCompte
+     * @param dateCreation
+     * @param soldeCompte
+     * @param typeCompte
+     * @param motDePasse
+     */
 
     public Compte(Long numeroCompte, boolean etatCompte, Date dateCreation, BigDecimal soldeCompte, TypeCompte typeCompte , String motDePasse) {
         this.numeroCompte = numeroCompte;
@@ -134,6 +152,10 @@ public class Compte implements Serializable {
     public void setRetraitList(List<Retrait> retraitList) {
         this.retraitList = retraitList;
     }
+
+    /**
+     * @return Chaines de caracteres des infos sur Compte
+     */
 
     @Override
     public String toString() {
