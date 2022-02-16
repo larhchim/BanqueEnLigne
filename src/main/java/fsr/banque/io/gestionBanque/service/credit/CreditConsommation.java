@@ -6,6 +6,7 @@ import fsr.banque.io.gestionBanque.models.Credits;
 import fsr.banque.io.gestionBanque.service.compte.CompteContrat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -31,6 +32,7 @@ public class CreditConsommation extends CreditAbstraction{
         credit = Credits.Credit.CONSOMMATION;
     }
 
+    @Transactional
     @Override
     public Credits createCredit(Credits credits, Compte compte) {
 
