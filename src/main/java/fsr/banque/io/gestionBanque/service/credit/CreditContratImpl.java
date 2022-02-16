@@ -60,14 +60,14 @@ public class CreditContratImpl implements CreditContrat{
         BigDecimal montantReglee = credit.getMontantReglee();
         BigDecimal montantReste = credit.getMontantReste();
         BigDecimal montantCredit = credit.getMontantCredit();
-        Long nombreMensualite = credit.getNombreAnneeCredit();
+        Long nombreMensualite = credit.getNombreMensualitesCredit();
 
         BigDecimal mensualite = credit.getMensualite();
 
         BigDecimal nombreMensNouveau;
 
 
-        if (resteSolde.compareTo(zero) == 1){
+        if (resteSolde.compareTo(zero.subtract(one)) == 1){
 
             if( !(montantReglee.compareTo(montantCredit) == 0) && !(montantReste.compareTo(zero) == 0) ){
 
@@ -81,7 +81,7 @@ public class CreditContratImpl implements CreditContrat{
 
                     nombreMensNouveau = montantReste.multiply(BigDecimal.valueOf(nombreMensualite)).divide(montantReste);
 
-                    credit.setNombreAnneeCredit(nombreMensNouveau.longValue());
+                    credit.setNombreMensualitesCredit(nombreMensNouveau.longValue());
                     credit.setMontantReglee(montantReglee);
                     credit.setMontantReste(montantReste);
 

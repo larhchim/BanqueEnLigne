@@ -31,7 +31,7 @@ public class Credits implements Serializable {
     @Enumerated(EnumType.STRING)
     private Credit typeCredit;
 
-    private Long nombreAnneeCredit;
+    private Long nombreMensualitesCredit;
 
     private BigDecimal montantReste;
 
@@ -42,13 +42,13 @@ public class Credits implements Serializable {
     @JsonIgnore
     private Compte compteCredit;
 
-    public Credits(Long idCredit, BigDecimal montantCredit, Date dateCredit, BigDecimal mensualite, Credit typeCredit, Long nombreAnneeCredit, BigDecimal montantReste, BigDecimal montantReglee) {
+    public Credits(Long idCredit, BigDecimal montantCredit, Date dateCredit, BigDecimal mensualite, Credit typeCredit, Long nombreMensualitesCredit, BigDecimal montantReste, BigDecimal montantReglee) {
         this.idCredit = idCredit;
         this.montantCredit = montantCredit;
         this.dateCredit = dateCredit;
         this.mensualite = mensualite;
         this.typeCredit = typeCredit;
-        this.nombreAnneeCredit = nombreAnneeCredit;
+        this.nombreMensualitesCredit = nombreMensualitesCredit;
         this.montantReste = montantReste;
         this.montantReglee = montantReglee;
     }
@@ -97,12 +97,12 @@ public class Credits implements Serializable {
         this.typeCredit = typeCredit;
     }
 
-    public Long getNombreAnneeCredit() {
-        return nombreAnneeCredit;
+    public Long getNombreMensualitesCredit() {
+        return nombreMensualitesCredit;
     }
 
-    public void setNombreAnneeCredit(Long nombreAnneeCredit) {
-        this.nombreAnneeCredit = nombreAnneeCredit;
+    public void setNombreMensualitesCredit(Long nombreMensualitesCredit) {
+        this.nombreMensualitesCredit = nombreMensualitesCredit;
     }
 
     public BigDecimal getMontantReste() {
