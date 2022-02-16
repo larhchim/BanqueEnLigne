@@ -37,7 +37,7 @@ public class Credits implements Serializable {
 
     private BigDecimal montantReglee;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "numeroCompte")
     @JsonIgnore
     private Compte compteCredit;

@@ -2,9 +2,14 @@ package fsr.banque.io.gestionBanque;
 
 import fsr.banque.io.gestionBanque.dao.UtilisateurDAO;
 import fsr.banque.io.gestionBanque.models.Compte;
+import fsr.banque.io.gestionBanque.models.Credits;
 import fsr.banque.io.gestionBanque.models.Retrait;
 import fsr.banque.io.gestionBanque.models.Utilisateur;
 import fsr.banque.io.gestionBanque.service.compte.*;
+import fsr.banque.io.gestionBanque.service.credit.CreditConsommation;
+import fsr.banque.io.gestionBanque.service.credit.CreditContrat;
+import fsr.banque.io.gestionBanque.service.credit.CreditImmobilier;
+import fsr.banque.io.gestionBanque.service.credit.FabriqueCredit;
 import fsr.banque.io.gestionBanque.service.retrait.RetraitContrat;
 import fsr.banque.io.gestionBanque.service.utilisateur.UtilisateurContrat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +33,8 @@ public class GestionBanqueApplication {
 	private FabriqueCompte fabriqueCompte;
 	private CompteContrat compteContrat;
 	private RetraitContrat retraitContrat;
+	private CreditContrat creditContrat;
+	private FabriqueCredit fabriqueCredit;
 
 	@Autowired
 	public void setRetraitContrat(RetraitContrat retraitContrat) {
@@ -47,6 +54,16 @@ public class GestionBanqueApplication {
 	@Autowired
 	public void setUser(UtilisateurContrat user) {
 		this.user = user;
+	}
+
+	@Autowired
+	public void setCreditContrat(CreditContrat creditContrat) {
+		this.creditContrat = creditContrat;
+	}
+
+	@Autowired
+	public void setFabriqueCredit(FabriqueCredit fabriqueCredit) {
+		this.fabriqueCredit = fabriqueCredit;
 	}
 
 	public static void main(String[] args) {
@@ -159,6 +176,7 @@ public class GestionBanqueApplication {
 			System.out.println(c.toString());
 
 		}*/
+/*
 		try {
 			Retrait retrait = new Retrait();
 			retrait.setDateRetrait(new Date());
@@ -170,7 +188,18 @@ public class GestionBanqueApplication {
 			e.printStackTrace();
 			System.out.println(e);
 		}
+*/
+		/*CreditConsommation cc = (CreditConsommation) fabriqueCredit.generateCredit(Credits.Credit.CONSOMMATION);
+		Credits cd = new Credits();
+		cd.setNombreMensualitesCredit(Long.valueOf(24));
+		cd.setMontantCredit(BigDecimal.valueOf(50000));
+		cc.createCredit(cd,compteContrat.findLeCompte(Long.valueOf("90314587")));*/
 
+		CreditImmobilier cc = (CreditImmobilier) fabriqueCredit.generateCredit(Credits.Credit.IMMOBILIER);
+		Credits cd = new Credits();
+		cd.setNombreMensualitesCredit(Long.valueOf(180));
+		cd.setMontantCredit(BigDecimal.valueOf(100000));
+		cc.createCredit(cd,compteContrat.findLeCompte(Long.valueOf("90314587")));
 
 	}
 

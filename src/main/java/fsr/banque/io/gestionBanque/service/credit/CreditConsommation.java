@@ -3,16 +3,24 @@ package fsr.banque.io.gestionBanque.service.credit;
 import fsr.banque.io.gestionBanque.dao.CreditsDAO;
 import fsr.banque.io.gestionBanque.models.Compte;
 import fsr.banque.io.gestionBanque.models.Credits;
+import fsr.banque.io.gestionBanque.service.compte.CompteContrat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 @Service
 public class CreditConsommation extends CreditAbstraction{
 
     private CreditsDAO creditsDAO;
+    private CompteContrat compteContrat;
+
+    @Autowired
+    public void setCompteContrat(CompteContrat compteContrat) {
+        this.compteContrat = compteContrat;
+    }
 
     @Autowired
     public void setCreditsDAO(CreditsDAO creditsDAO) {
@@ -24,7 +32,7 @@ public class CreditConsommation extends CreditAbstraction{
     }
 
     @Override
-    Credits createCredit(Credits credits, Compte compte) {
+    public Credits createCredit(Credits credits, Compte compte) {
 
         credits.setCompteCredit(compte);
         credits.setDateCredit(new Date());
@@ -32,17 +40,36 @@ public class CreditConsommation extends CreditAbstraction{
         credits.setMontantReglee(BigDecimal.ZERO);
 
         BigDecimal C = credits.getMontantCredit();
-        BigDecimal TAEG = BigDecimal.valueOf(0.0306);
-        BigDecimal N = BigDecimal.valueOf(credits.getNombreMensualitesCredit()).divide(BigDecimal.valueOf(12));
-        TAEG = TAEG.divide(BigDecimal.valueOf(12));
-        BigDecimal M1 = C.multiply(TAEG);
-        BigDecimal M2 = TAEG.pow(-(12*N.intValue())).add(BigDecimal.ONE);
-        BigDecimal M3 = BigDecimal.ONE.subtract(M2);
 
-        BigDecimal M = M1.divide(M3);
+        BigDecimal TAEG = BigDecimal.valueOf(0.0306);
+        System.out.println("*******TAEG="+TAEG);//
+        BigDecimal N = BigDecimal.valueOf(credits.getNombreMensualitesCredit()).divide(BigDecimal.valueOf(12));
+        System.out.println("*******N="+N);//
+
+        TAEG = TAEG.divide(BigDecimal.valueOf(12));
+        System.out.println("*******TAEG /BY 12="+TAEG);//
+
+        BigDecimal M1 = C.multiply(TAEG);
+        System.out.println("*******M1="+M1);//
+
+        double M2 = Math.pow(1+TAEG.doubleValue(),-(12*N.intValue()));
+        System.out.println("*******M2="+M2);//
+
+        BigDecimal M3 = BigDecimal.ONE.subtract(BigDecimal.valueOf(M2));
+        System.out.println("*******M3="+M3);//
+
+
+        BigDecimal M = M1.divide(M3, RoundingMode.HALF_UP);
+
+        System.out.println("*******M="+M);
+
 
         credits.setMensualite(M);
         credits.setMontantReste(M.multiply(BigDecimal.valueOf(credits.getNombreMensualitesCredit())));
+
+        compte.setSoldeCompte(compte.getSoldeCompte().add(C));
+
+        compteContrat.updateAccount(compte,compte.getNumeroCompte());
 
         return creditsDAO.save(credits);
 
