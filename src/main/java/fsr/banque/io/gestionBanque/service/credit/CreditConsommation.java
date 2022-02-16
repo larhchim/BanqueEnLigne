@@ -42,26 +42,18 @@ public class CreditConsommation extends CreditAbstraction{
         BigDecimal C = credits.getMontantCredit();
 
         BigDecimal TAEG = BigDecimal.valueOf(0.0306);
-        System.out.println("*******TAEG="+TAEG);//
         BigDecimal N = BigDecimal.valueOf(credits.getNombreMensualitesCredit()).divide(BigDecimal.valueOf(12));
-        System.out.println("*******N="+N);//
 
         TAEG = TAEG.divide(BigDecimal.valueOf(12));
-        System.out.println("*******TAEG /BY 12="+TAEG);//
 
         BigDecimal M1 = C.multiply(TAEG);
-        System.out.println("*******M1="+M1);//
 
         double M2 = Math.pow(1+TAEG.doubleValue(),-(12*N.intValue()));
-        System.out.println("*******M2="+M2);//
 
         BigDecimal M3 = BigDecimal.ONE.subtract(BigDecimal.valueOf(M2));
-        System.out.println("*******M3="+M3);//
 
 
         BigDecimal M = M1.divide(M3, RoundingMode.HALF_UP);
-
-        System.out.println("*******M="+M);
 
 
         credits.setMensualite(M);

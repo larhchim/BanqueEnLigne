@@ -195,12 +195,18 @@ public class GestionBanqueApplication {
 		cd.setMontantCredit(BigDecimal.valueOf(50000));
 		cc.createCredit(cd,compteContrat.findLeCompte(Long.valueOf("90314587")));*/
 
-		CreditImmobilier cc = (CreditImmobilier) fabriqueCredit.generateCredit(Credits.Credit.IMMOBILIER);
+		/*CreditImmobilier cc = (CreditImmobilier) fabriqueCredit.generateCredit(Credits.Credit.IMMOBILIER);
 		Credits cd = new Credits();
 		cd.setNombreMensualitesCredit(Long.valueOf(180));
 		cd.setMontantCredit(BigDecimal.valueOf(100000));
-		cc.createCredit(cd,compteContrat.findLeCompte(Long.valueOf("90314587")));
+		cc.createCredit(cd,compteContrat.findLeCompte(Long.valueOf("90314587")));*/
 
+	/*	try {
+			creditContrat.reglerUneMensualite(Long.valueOf(8752),BigDecimal.valueOf(843.86));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+*/
 	}
 
 	@Bean

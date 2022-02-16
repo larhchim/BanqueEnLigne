@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface CreditContrat {
 
-
-
     Credits updateCredit(Credits credits);
 
     List<Credits> allCredits();

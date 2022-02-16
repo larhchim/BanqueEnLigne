@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Service
@@ -47,6 +48,10 @@ public class CreditContratImpl implements CreditContrat{
         return creditsDAO.findCreditsByMotCle(mc, PageRequest.of(page, size));
     }
 
+    public boolean lessThan(Long one , Long two){
+        return one <= two;
+    }
+
     @Transactional
     @Override
     public Credits reglerUneMensualite(Long idCredit, BigDecimal montantApayer) throws Exception {
@@ -71,7 +76,7 @@ public class CreditContratImpl implements CreditContrat{
 
         if (resteSolde.compareTo(zero.subtract(one)) == 1){
 
-            if( !(montantReglee.compareTo(montantCredit) == 0) && !(montantReste.compareTo(zero) == 0) ){
+            if( !(montantReglee.compareTo(montantCredit) == 0) && !(montantReste.compareTo(zero) == 0) && lessThan(montantApayer.longValue(),montantReste.longValue())){
 
                 if( montantApayer.compareTo(mensualite.subtract(one)) == 1 ) {
 
@@ -81,7 +86,11 @@ public class CreditContratImpl implements CreditContrat{
                     montantReglee = montantReglee.add(montantApayer);
                     montantReste = montantReste.subtract(montantApayer);
 
-                    nombreMensNouveau = montantReste.multiply(BigDecimal.valueOf(nombreMensualite)).divide(montantReste);
+                    if(montantReste.compareTo(BigDecimal.ZERO)==0){
+                        nombreMensNouveau = BigDecimal.ZERO;
+                    }else {
+                        nombreMensNouveau = montantReste.multiply(BigDecimal.valueOf(nombreMensualite)).divide(montantReste.add(montantApayer), RoundingMode.UP);
+                    }
 
                     credit.setNombreMensualitesCredit(nombreMensNouveau.longValue());
                     credit.setMontantReglee(montantReglee);
@@ -94,7 +103,7 @@ public class CreditContratImpl implements CreditContrat{
 
 
             }else {
-                throw new Exception("Credit deja pré payé merci pour votre fidélité");
+                throw new Exception("Credit deja pré payé et/ou vous mettez une somme supérieure à la somme credit restante");
             }
 
 
