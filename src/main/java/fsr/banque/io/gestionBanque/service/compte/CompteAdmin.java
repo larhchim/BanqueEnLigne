@@ -30,11 +30,16 @@ public class CompteAdmin extends CompteAbstraction{
 
     @Transactional
     @Override
-    public Compte createAccount(Compte compte,Long userId) {
+    public Compte createAccount(Compte compte,Long userId) throws Exception {
 
         compte.setTypeCompte(typeCompte);
+        compte.setEtatCompte(true);
         Utilisateur utilisateur = user.findTheUser(userId);
         compte.setUtilisateur(utilisateur);
+
+        if ( compte.getSoldeCompte().longValue() < 0 ){
+            throw new Exception("Montant specifié null et/ou negative");
+        }
 
         return cptDAO.save(compte);
 

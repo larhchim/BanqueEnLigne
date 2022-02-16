@@ -34,36 +34,44 @@ public class CreditConsommation extends CreditAbstraction{
 
     @Transactional
     @Override
-    public Credits createCredit(Credits credits, Compte compte) {
+    public Credits createCredit(Credits credits, Compte compte) throws Exception {
 
         credits.setCompteCredit(compte);
         credits.setDateCredit(new Date());
         credits.setTypeCredit(credit);
         credits.setMontantReglee(BigDecimal.ZERO);
 
-        BigDecimal C = credits.getMontantCredit();
+        if(!compte.isEtatCompte()){
+            throw new Exception("Compte n'est plus disponible veuillez contacter votre agence");
+        }else if ( credits.getMontantCredit().longValue() <= 0 ){
+            throw new Exception("Montant specifié null et/ou negative");
+        }else {
 
-        BigDecimal TAEG = BigDecimal.valueOf(0.0306);
-        BigDecimal N = BigDecimal.valueOf(credits.getNombreMensualitesCredit()).divide(BigDecimal.valueOf(12));
+            BigDecimal C = credits.getMontantCredit();
 
-        TAEG = TAEG.divide(BigDecimal.valueOf(12));
+            BigDecimal TAEG = BigDecimal.valueOf(0.0306);
+            BigDecimal N = BigDecimal.valueOf(credits.getNombreMensualitesCredit()).divide(BigDecimal.valueOf(12));
 
-        BigDecimal M1 = C.multiply(TAEG);
+            TAEG = TAEG.divide(BigDecimal.valueOf(12));
 
-        double M2 = Math.pow(1+TAEG.doubleValue(),-(12*N.intValue()));
+            BigDecimal M1 = C.multiply(TAEG);
 
-        BigDecimal M3 = BigDecimal.ONE.subtract(BigDecimal.valueOf(M2));
+            double M2 = Math.pow(1+TAEG.doubleValue(),-(12*N.intValue()));
+
+            BigDecimal M3 = BigDecimal.ONE.subtract(BigDecimal.valueOf(M2));
 
 
-        BigDecimal M = M1.divide(M3, RoundingMode.HALF_UP);
+            BigDecimal M = M1.divide(M3, RoundingMode.HALF_UP);
 
 
-        credits.setMensualite(M);
-        credits.setMontantReste(M.multiply(BigDecimal.valueOf(credits.getNombreMensualitesCredit())));
+            credits.setMensualite(M);
+            credits.setMontantReste(M.multiply(BigDecimal.valueOf(credits.getNombreMensualitesCredit())));
 
-        compte.setSoldeCompte(compte.getSoldeCompte().add(C));
+            compte.setSoldeCompte(compte.getSoldeCompte().add(C));
 
-        compteContrat.updateAccount(compte,compte.getNumeroCompte());
+            compteContrat.updateAccount(compte,compte.getNumeroCompte());
+        }
+
 
         return creditsDAO.save(credits);
 

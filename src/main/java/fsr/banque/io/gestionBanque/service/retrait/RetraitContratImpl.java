@@ -35,14 +35,26 @@ public class RetraitContratImpl implements RetraitContrat {
 
         Compte compte = retrait.getCompteRetrait();
 
-        if (compte.getSoldeCompte().subtract(retrait.getMontantRetrait()).compareTo(new BigDecimal(0.0)) == 1){
-            compte.setSoldeCompte(compte.getSoldeCompte().subtract(retrait.getMontantRetrait()));
-            compteContrat.updateAccount(compte,compte.getNumeroCompte());
-            System.out.println(compte.getSoldeCompte());
+        if(!retrait.getCompteRetrait().isEtatCompte()){
+            throw new Exception("Compte n'est plus disponible veuillez contacter votre agence");
+        }else if ( retrait.getMontantRetrait().longValue() <=0 ){
+            throw new Exception("Montant specifié null et/ou negative");
+        }else {
+
+            if (compte.getSoldeCompte().subtract(retrait.getMontantRetrait()).compareTo(BigDecimal.ZERO) == 1){
+
+                compte.setSoldeCompte(compte.getSoldeCompte().subtract(retrait.getMontantRetrait()));
+                compteContrat.updateAccount(compte,compte.getNumeroCompte());
+                System.out.println(compte.getSoldeCompte());
+
+            }
+            else {
+                throw new Exception("operation impossible solde insuffisant");
+            }
+
         }
-        else {
-            throw new Exception("operation impossible solde insuffisant");
-        }
+
+
 
         return retraitDAO.save(retrait);
 

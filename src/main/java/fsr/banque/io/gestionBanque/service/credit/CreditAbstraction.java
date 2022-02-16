@@ -7,6 +7,6 @@ public abstract class CreditAbstraction{
 
     Credits.Credit credit;
 
-    abstract Credits createCredit(Credits credits, Compte compte);
+    abstract Credits createCredit(Credits credits, Compte compte) throws Exception;
 
 }

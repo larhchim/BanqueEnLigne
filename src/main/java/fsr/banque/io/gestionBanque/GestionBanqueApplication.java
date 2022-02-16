@@ -1,10 +1,7 @@
 package fsr.banque.io.gestionBanque;
 
 import fsr.banque.io.gestionBanque.dao.UtilisateurDAO;
-import fsr.banque.io.gestionBanque.models.Compte;
-import fsr.banque.io.gestionBanque.models.Credits;
-import fsr.banque.io.gestionBanque.models.Retrait;
-import fsr.banque.io.gestionBanque.models.Utilisateur;
+import fsr.banque.io.gestionBanque.models.*;
 import fsr.banque.io.gestionBanque.service.compte.*;
 import fsr.banque.io.gestionBanque.service.credit.CreditConsommation;
 import fsr.banque.io.gestionBanque.service.credit.CreditContrat;
@@ -12,6 +9,7 @@ import fsr.banque.io.gestionBanque.service.credit.CreditImmobilier;
 import fsr.banque.io.gestionBanque.service.credit.FabriqueCredit;
 import fsr.banque.io.gestionBanque.service.retrait.RetraitContrat;
 import fsr.banque.io.gestionBanque.service.utilisateur.UtilisateurContrat;
+import fsr.banque.io.gestionBanque.service.virement.VirementContrat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
@@ -35,6 +33,12 @@ public class GestionBanqueApplication {
 	private RetraitContrat retraitContrat;
 	private CreditContrat creditContrat;
 	private FabriqueCredit fabriqueCredit;
+	private VirementContrat virementContrat;
+
+	@Autowired
+	public void setVirementContrat(VirementContrat virementContrat) {
+		this.virementContrat = virementContrat;
+	}
 
 	@Autowired
 	public void setRetraitContrat(RetraitContrat retraitContrat) {
@@ -207,6 +211,20 @@ public class GestionBanqueApplication {
 			e.printStackTrace();
 		}
 */
+/*
+		Long emetteur = Long.valueOf(90314587);
+		Long recepteur = Long.valueOf(90314538);
+		Virement virement = new Virement();
+		virement.setMontant(BigDecimal.valueOf(6703.97));
+
+		try {
+			virementContrat.createNewVirement(virement,emetteur,recepteur);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+*/
+
+
 	}
 
 	@Bean

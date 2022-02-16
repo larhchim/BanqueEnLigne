@@ -73,6 +73,10 @@ public class CreditContratImpl implements CreditContrat{
 
         BigDecimal nombreMensNouveau;
 
+        if ( montantApayer.longValue() <= 0 ){
+            throw new Exception("Montant specifié null et/ou negative");
+        }
+
 
         if (resteSolde.compareTo(zero.subtract(one)) == 1){
 

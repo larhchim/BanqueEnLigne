@@ -41,8 +41,12 @@ public class CompteContratImpl implements CompteContrat{
 
     @Transactional
     @Override
-    public Compte findLeCompte(Long id){
-        return compteDAO.getById(id);
+    public Compte findLeCompte(Long id) throws Exception {
+        Compte compte = compteDAO.getById(id);
+        if (!compte.isEtatCompte()){
+            throw new Exception("Compte n'est plus disponible veuillez contacter votre agence");
+        }
+        return compte;
     }
 
 }

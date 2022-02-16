@@ -13,6 +13,6 @@ public interface CompteContrat {
 
     List<Compte> allAccounts();
 
-    Compte findLeCompte(Long id);
+    Compte findLeCompte(Long id) throws Exception;
 
 }

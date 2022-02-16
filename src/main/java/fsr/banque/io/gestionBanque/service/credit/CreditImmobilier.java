@@ -34,34 +34,43 @@ public class CreditImmobilier extends CreditAbstraction{
 
     @Transactional
     @Override
-    public Credits createCredit(Credits credits, Compte compte) {
+    public Credits createCredit(Credits credits, Compte compte) throws Exception {
 
         credits.setCompteCredit(compte);
         credits.setDateCredit(new Date());
         credits.setTypeCredit(credit);
         credits.setMontantReglee(BigDecimal.ZERO);
 
-        BigDecimal C = credits.getMontantCredit();
-        BigDecimal N = BigDecimal.valueOf(credits.getNombreMensualitesCredit());
-        Long nombre = N.longValue();
+        if(!compte.isEtatCompte()){
+            throw new Exception("Compte n'est plus disponible veuillez contacter votre agence");
+        }else if ( credits.getMontantCredit().longValue() <= 0 ){
+            throw new Exception("Montant specifié null et/ou negative");
+        }else {
+
+            BigDecimal C = credits.getMontantCredit();
+            BigDecimal N = BigDecimal.valueOf(credits.getNombreMensualitesCredit());
+            Long nombre = N.longValue();
 
 
 
-        BigDecimal TAUX = BigDecimal.valueOf(0.005);
-        BigDecimal M1 = BigDecimal.valueOf(Math.pow(TAUX.doubleValue() +1,nombre));
-        BigDecimal M2 = TAUX.multiply(M1);
-        M2 = C.multiply(M2);
-        BigDecimal M3 = M1.subtract(BigDecimal.ONE);
+            BigDecimal TAUX = BigDecimal.valueOf(0.005);
+            BigDecimal M1 = BigDecimal.valueOf(Math.pow(TAUX.doubleValue() +1,nombre));
+            BigDecimal M2 = TAUX.multiply(M1);
+            M2 = C.multiply(M2);
+            BigDecimal M3 = M1.subtract(BigDecimal.ONE);
 
 
-        BigDecimal M = M2.divide(M3, RoundingMode.HALF_UP);
+            BigDecimal M = M2.divide(M3, RoundingMode.HALF_UP);
 
-        credits.setMensualite(M);
-        credits.setMontantReste(M.multiply(BigDecimal.valueOf(credits.getNombreMensualitesCredit())));
+            credits.setMensualite(M);
+            credits.setMontantReste(M.multiply(BigDecimal.valueOf(credits.getNombreMensualitesCredit())));
 
-        compte.setSoldeCompte(compte.getSoldeCompte().add(C));
+            compte.setSoldeCompte(compte.getSoldeCompte().add(C));
 
-        compteContrat.updateAccount(compte,compte.getNumeroCompte());
+            compteContrat.updateAccount(compte,compte.getNumeroCompte());
+        }
+
+
         return creditsDAO.save(credits);
 
     }

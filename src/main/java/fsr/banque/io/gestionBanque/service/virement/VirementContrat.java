@@ -9,7 +9,7 @@ public interface VirementContrat {
 
     Page<Virement> findVirementByMotCle(Long mc,int page,int size);
 
-    Virement createNewVirement(Virement virement,Long emetteur,Long recepteur);
+    Virement createNewVirement(Virement virement,Long emetteur,Long recepteur) throws Exception;
 
     List<Virement> allVirements();
 
