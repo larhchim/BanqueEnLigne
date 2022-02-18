@@ -1,6 +1,7 @@
 package fsr.banque.io.gestionBanque.service.compte;
 
 import fsr.banque.io.gestionBanque.dao.CompteDAO;
+import fsr.banque.io.gestionBanque.exceptions.InvalidAccountException;
 import fsr.banque.io.gestionBanque.models.Compte;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,7 +45,7 @@ public class CompteContratImpl implements CompteContrat{
     public Compte findLeCompte(Long id) throws Exception {
         Compte compte = compteDAO.getById(id);
         if (!compte.isEtatCompte()){
-            throw new Exception("Compte n'est plus disponible veuillez contacter votre agence");
+            throw new InvalidAccountException("Compte n'est plus disponible veuillez contacter votre agence");
         }
         return compte;
     }

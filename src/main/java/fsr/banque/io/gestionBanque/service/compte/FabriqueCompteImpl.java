@@ -1,5 +1,6 @@
 package fsr.banque.io.gestionBanque.service.compte;
 
+import fsr.banque.io.gestionBanque.exceptions.InvalidSwitchCaseException;
 import fsr.banque.io.gestionBanque.models.Compte;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -17,7 +18,7 @@ public class FabriqueCompteImpl implements FabriqueCompte{
     }
 
     @Override
-    public CompteAbstraction generateAccount(Compte.TypeCompte typeCompte) {
+    public CompteAbstraction generateAccount(Compte.TypeCompte typeCompte) throws InvalidSwitchCaseException {
 
         CompteAbstraction compte;
 
@@ -32,7 +33,7 @@ public class FabriqueCompteImpl implements FabriqueCompte{
                 compte = applicationContext.getBean(CompteAdmin.class);
                 break;
             default:
-                throw new IllegalArgumentException("Veuillez specifier le type de compte");
+                throw new InvalidSwitchCaseException("Veuillez specifier le type de compte");
         }
 
        return compte;

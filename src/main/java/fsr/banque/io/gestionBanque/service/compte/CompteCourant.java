@@ -1,12 +1,15 @@
 package fsr.banque.io.gestionBanque.service.compte;
 
 import fsr.banque.io.gestionBanque.dao.CompteDAO;
+import fsr.banque.io.gestionBanque.exceptions.InvalidAmountException;
 import fsr.banque.io.gestionBanque.models.Compte;
 import fsr.banque.io.gestionBanque.models.Utilisateur;
 import fsr.banque.io.gestionBanque.service.utilisateur.UtilisateurContrat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 @Service
 public class CompteCourant extends CompteAbstraction{
@@ -33,12 +36,14 @@ public class CompteCourant extends CompteAbstraction{
     public Compte createAccount(Compte compte,Long userId) throws Exception {
 
         Utilisateur utilisateur = user.findTheUser(userId);
+
+        compte.setDateCreation(new Date());
         compte.setEtatCompte(true);
         compte.setUtilisateur(utilisateur);
         compte.setTypeCompte(typeCompte);
 
         if ( compte.getSoldeCompte().longValue() < 0 ){
-            throw new Exception("Montant specifié null et/ou negative");
+            throw new InvalidAmountException("Montant specifié null et/ou negative");
         }
 
         return cptDAO.save(compte);

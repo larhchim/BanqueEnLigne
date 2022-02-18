@@ -1,8 +1,10 @@
 package fsr.banque.io.gestionBanque.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -21,8 +23,10 @@ public class Retrait implements Serializable {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "WITHDRAWAL_GEN")
     private Long idRetrait;
 
+    @DecimalMin(value = "0.0",message = "Veuillez specifier un Montant Retrait superieure ou egale à zero")
     private BigDecimal montantRetrait;
 
+    @JsonProperty(access =JsonProperty.Access.READ_ONLY)
     @Temporal(TemporalType.DATE)
     private Date dateRetrait;
 

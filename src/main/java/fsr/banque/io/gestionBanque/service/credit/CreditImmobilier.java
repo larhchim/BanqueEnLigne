@@ -1,6 +1,8 @@
 package fsr.banque.io.gestionBanque.service.credit;
 
 import fsr.banque.io.gestionBanque.dao.CreditsDAO;
+import fsr.banque.io.gestionBanque.exceptions.InvalidAccountException;
+import fsr.banque.io.gestionBanque.exceptions.InvalidAmountException;
 import fsr.banque.io.gestionBanque.models.Compte;
 import fsr.banque.io.gestionBanque.models.Credits;
 import fsr.banque.io.gestionBanque.service.compte.CompteContrat;
@@ -42,9 +44,9 @@ public class CreditImmobilier extends CreditAbstraction{
         credits.setMontantReglee(BigDecimal.ZERO);
 
         if(!compte.isEtatCompte()){
-            throw new Exception("Compte n'est plus disponible veuillez contacter votre agence");
+            throw new InvalidAccountException("Compte n'est plus disponible veuillez contacter votre agence");
         }else if ( credits.getMontantCredit().longValue() <= 0 ){
-            throw new Exception("Montant specifié null et/ou negative");
+            throw new InvalidAmountException("Montant specifié null et/ou negative");
         }else {
 
             BigDecimal C = credits.getMontantCredit();

@@ -1,5 +1,6 @@
 package fsr.banque.io.gestionBanque.service.credit;
 
+import fsr.banque.io.gestionBanque.exceptions.InvalidSwitchCaseException;
 import fsr.banque.io.gestionBanque.models.Credits;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -16,7 +17,7 @@ public class FabriqueCreditImpl implements FabriqueCredit{
     }
 
     @Override
-    public CreditAbstraction generateCredit(Credits.Credit credit) {
+    public CreditAbstraction generateCredit(Credits.Credit credit) throws InvalidSwitchCaseException {
 
         CreditAbstraction creditAbstraction;
 
@@ -28,7 +29,7 @@ public class FabriqueCreditImpl implements FabriqueCredit{
                 creditAbstraction = applicationContext.getBean(CreditConsommation.class);
                 break;
             default:
-                throw new IllegalArgumentException("Veuillez choisir un type de credit valide");
+                throw new InvalidSwitchCaseException("Veuillez choisir un type de credit valide");
         }
         return creditAbstraction;
     }

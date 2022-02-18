@@ -1,6 +1,9 @@
 package fsr.banque.io.gestionBanque.service.credit;
 
 import fsr.banque.io.gestionBanque.dao.CreditsDAO;
+import fsr.banque.io.gestionBanque.exceptions.InvalidAmountException;
+import fsr.banque.io.gestionBanque.exceptions.InvalidBalanceException;
+import fsr.banque.io.gestionBanque.exceptions.InvalidPayementException;
 import fsr.banque.io.gestionBanque.models.Compte;
 import fsr.banque.io.gestionBanque.models.Credits;
 import fsr.banque.io.gestionBanque.service.compte.CompteContrat;
@@ -74,7 +77,7 @@ public class CreditContratImpl implements CreditContrat{
         BigDecimal nombreMensNouveau;
 
         if ( montantApayer.longValue() <= 0 ){
-            throw new Exception("Montant specifié null et/ou negative");
+            throw new InvalidAmountException("Montant specifié null et/ou negative");
         }
 
 
@@ -101,18 +104,18 @@ public class CreditContratImpl implements CreditContrat{
                     credit.setMontantReste(montantReste);
 
                 }else {
-                    throw new Exception("Impossible de regler une somme inferieure à la mensualité déclarée pour votre credit");
+                    throw new InvalidAmountException("Impossible de regler une somme inferieure à la mensualité déclarée pour votre credit");
                 }
 
 
 
             }else {
-                throw new Exception("Credit deja pré payé et/ou vous mettez une somme supérieure à la somme credit restante");
+                throw new InvalidPayementException("Credit deja pré payé et/ou vous mettez une somme supérieure à la somme credit restante");
             }
 
 
         }else {
-            throw new Exception("Operation Impossible solde insuffisant");
+            throw new InvalidBalanceException("Operation Impossible solde insuffisant");
         }
 
 

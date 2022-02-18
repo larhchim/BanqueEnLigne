@@ -1,6 +1,9 @@
 package fsr.banque.io.gestionBanque.service.retrait;
 
 import fsr.banque.io.gestionBanque.dao.RetraitDAO;
+import fsr.banque.io.gestionBanque.exceptions.InvalidAccountException;
+import fsr.banque.io.gestionBanque.exceptions.InvalidAmountException;
+import fsr.banque.io.gestionBanque.exceptions.InvalidBalanceException;
 import fsr.banque.io.gestionBanque.models.Compte;
 import fsr.banque.io.gestionBanque.models.Retrait;
 import fsr.banque.io.gestionBanque.service.compte.CompteContrat;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -36,9 +40,9 @@ public class RetraitContratImpl implements RetraitContrat {
         Compte compte = retrait.getCompteRetrait();
 
         if(!retrait.getCompteRetrait().isEtatCompte()){
-            throw new Exception("Compte n'est plus disponible veuillez contacter votre agence");
+            throw new InvalidAccountException("Compte n'est plus disponible veuillez contacter votre agence");
         }else if ( retrait.getMontantRetrait().longValue() <=0 ){
-            throw new Exception("Montant specifié null et/ou negative");
+            throw new InvalidAmountException("Montant specifié null et/ou negative");
         }else {
 
             if (compte.getSoldeCompte().subtract(retrait.getMontantRetrait()).compareTo(BigDecimal.ZERO) == 1){
@@ -49,11 +53,12 @@ public class RetraitContratImpl implements RetraitContrat {
 
             }
             else {
-                throw new Exception("operation impossible solde insuffisant");
+                throw new InvalidBalanceException("operation impossible solde insuffisant");
             }
 
         }
 
+        retrait.setDateRetrait(new Date());
 
 
         return retraitDAO.save(retrait);

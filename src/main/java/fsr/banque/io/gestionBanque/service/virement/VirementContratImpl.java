@@ -1,6 +1,9 @@
 package fsr.banque.io.gestionBanque.service.virement;
 
 import fsr.banque.io.gestionBanque.dao.VirementDAO;
+import fsr.banque.io.gestionBanque.exceptions.InvalidAccountException;
+import fsr.banque.io.gestionBanque.exceptions.InvalidAmountException;
+import fsr.banque.io.gestionBanque.exceptions.InvalidBalanceException;
 import fsr.banque.io.gestionBanque.models.Compte;
 import fsr.banque.io.gestionBanque.models.Virement;
 import fsr.banque.io.gestionBanque.service.compte.CompteContrat;
@@ -45,9 +48,9 @@ public class VirementContratImpl implements VirementContrat{
         Virement transaction = null;
 
         if(!compteEmetteur.isEtatCompte()){
-            throw new Exception("Votre Compte n'est plus disponible pour l'operation veuillez contacter votre agence");
+            throw new InvalidAccountException("Votre Compte n'est plus disponible pour l'operation veuillez contacter votre agence");
         }else if(!compteRecepteur.isEtatCompte()){
-            throw new Exception("Compte Destinataire n'est plus disponible pour l'operation veuillez contacter votre agence");
+            throw new InvalidAccountException("Compte Destinataire n'est plus disponible pour l'operation veuillez contacter votre agence");
         }else {
 
             virement.setNumeroCompteRecepteur(recepteur);
@@ -55,7 +58,7 @@ public class VirementContratImpl implements VirementContrat{
             virement.setDateVirement(new Date());
 
             if ( virement.getMontant().longValue() <=0 ){
-                throw new Exception("Montant specifié null et/ou negative");
+                throw new InvalidAmountException("Montant specifié null et/ou negative");
             }
 
             if ( compteEmetteur.getSoldeCompte().compareTo( virement.getMontant().subtract(BigDecimal.ONE) ) == 1 ){
@@ -69,7 +72,7 @@ public class VirementContratImpl implements VirementContrat{
                 transaction = virementDAO.save(virement);
 
             }else {
-                throw new Exception("Impossible d'effectuer le virement solde insuffisant");
+                throw new InvalidBalanceException("Impossible d'effectuer le virement solde insuffisant");
             }
 
         }

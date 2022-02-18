@@ -1,8 +1,11 @@
 package fsr.banque.io.gestionBanque.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -25,20 +28,27 @@ public class Credits implements Serializable {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "CRED_GEN")
     private Long idCredit;
 
+    @DecimalMin(value = "0.0",message = "Veuillez specifier un Montant superieure ou egale à zero")
     private BigDecimal montantCredit;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Temporal(TemporalType.DATE)
     private Date dateCredit;
 
+    @JsonProperty(access =JsonProperty.Access.READ_ONLY)
     private BigDecimal mensualite;
 
+    @NotNull(message = "Veuillez preciser le type de credit")
     @Enumerated(EnumType.STRING)
     private Credit typeCredit;
 
+    @JsonProperty(access =JsonProperty.Access.READ_ONLY)
     private Long nombreMensualitesCredit;
 
+    @JsonProperty(access =JsonProperty.Access.READ_ONLY)
     private BigDecimal montantReste;
 
+    @JsonProperty(access =JsonProperty.Access.READ_ONLY)
     private BigDecimal montantReglee;
 
     @ManyToOne

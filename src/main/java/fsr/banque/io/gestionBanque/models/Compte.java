@@ -2,8 +2,12 @@ package fsr.banque.io.gestionBanque.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -33,21 +37,26 @@ public class Compte implements Serializable {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "ACCOUNT_GEN")
     private Long numeroCompte;
 
+    @JsonProperty(access =JsonProperty.Access.READ_ONLY)
     private boolean etatCompte;
 
+    @JsonProperty(access =JsonProperty.Access.READ_ONLY)
     @Temporal(TemporalType.DATE)
     private Date dateCreation;
 
+    @DecimalMin(value = "0.0",message = "Veuillez specifier un solde superieure ou egale à zero")
     private BigDecimal soldeCompte;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @NotBlank(message = "Veuillez saisir un mot de passe")
     private String motDePasse;
 
+    @NotNull(message = "Veuillez preciser le type du compte")
     @Enumerated(EnumType.STRING)
     private TypeCompte typeCompte;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "idUtilisateur")
-    @JsonIgnore
     private Utilisateur utilisateur;
 
     @OneToMany(mappedBy = "compteVirement")

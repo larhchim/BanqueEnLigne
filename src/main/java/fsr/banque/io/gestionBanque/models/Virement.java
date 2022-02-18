@@ -1,8 +1,11 @@
 package fsr.banque.io.gestionBanque.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -21,16 +24,20 @@ public class Virement implements Serializable {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "TRANS_GEN")
     private Long idVirement;
 
+    @NotNull(message = "Veuillez specifier le numero compte recepteur")
     private Long numeroCompteRecepteur;
 
+    @DecimalMin(value = "0.0",message = "Veuillez specifier un Montant superieure ou egale à zero")
     private BigDecimal montant;
 
+    @JsonProperty(access=JsonProperty.Access.READ_ONLY)
     @Temporal(TemporalType.DATE)
     private Date dateVirement;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "numeroCompteEmetteur")
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @NotNull(message = "Veuillez specifier les informations du compte virement")
     private Compte compteVirement;
 
     /**
