@@ -1,5 +1,6 @@
 package fsr.banque.io.gestionBanque.service.compte;
 
+import fsr.banque.io.gestionBanque.exceptions.InvalidAccountException;
 import fsr.banque.io.gestionBanque.models.Compte;
 import org.springframework.data.domain.Page;
 
@@ -13,6 +14,6 @@ public interface CompteContrat {
 
     List<Compte> allAccounts();
 
-    Compte findLeCompte(Long id) throws Exception;
+    Compte findLeCompte(Long id) throws InvalidAccountException;
 
 }

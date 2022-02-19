@@ -3,6 +3,7 @@ package fsr.banque.io.gestionBanque.service.credit;
 import fsr.banque.io.gestionBanque.dao.CreditsDAO;
 import fsr.banque.io.gestionBanque.exceptions.InvalidAccountException;
 import fsr.banque.io.gestionBanque.exceptions.InvalidAmountException;
+import fsr.banque.io.gestionBanque.exceptions.InvalidMensualiteException;
 import fsr.banque.io.gestionBanque.models.Compte;
 import fsr.banque.io.gestionBanque.models.Credits;
 import fsr.banque.io.gestionBanque.service.compte.CompteContrat;
@@ -36,7 +37,7 @@ public class CreditImmobilier extends CreditAbstraction{
 
     @Transactional
     @Override
-    public Credits createCredit(Credits credits, Compte compte) throws Exception {
+    public Credits createCredit(Credits credits, Compte compte) throws InvalidAmountException,InvalidAccountException, InvalidMensualiteException {
 
         credits.setCompteCredit(compte);
         credits.setDateCredit(new Date());
@@ -45,8 +46,10 @@ public class CreditImmobilier extends CreditAbstraction{
 
         if(!compte.isEtatCompte()){
             throw new InvalidAccountException("Compte n'est plus disponible veuillez contacter votre agence");
-        }else if ( credits.getMontantCredit().longValue() <= 0 ){
-            throw new InvalidAmountException("Montant specifié null et/ou negative");
+        }else if ( credits.getMontantCredit().longValue() <= 0 || credits.getMontantCredit().longValue() < 100){
+            throw new InvalidAmountException("Montant specifié null et/ou negative et/ou inférieure à 100");
+        }else if ( credits.getNombreMensualitesCredit() <= 0 ){
+            throw new InvalidMensualiteException("Veuillez saisir une mensualité superieure strictement à 0");
         }else {
 
             BigDecimal C = credits.getMontantCredit();

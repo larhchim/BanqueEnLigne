@@ -57,6 +57,7 @@ public class Compte implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "idUtilisateur")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Utilisateur utilisateur;
 
     @OneToMany(mappedBy = "compteVirement")

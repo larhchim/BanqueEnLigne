@@ -32,6 +32,7 @@ public class Retrait implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "numeroCompte")
+    @JsonIgnore
     private Compte compteRetrait;
 
     /**
