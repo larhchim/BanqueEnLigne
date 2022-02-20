@@ -16,4 +16,6 @@ public interface CompteContrat {
 
     Compte findLeCompte(Long id) throws InvalidAccountException;
 
+    Compte disactivateAccount(Long idCompte,String motDePasse,String confirmation) throws InvalidAccountException;
+
 }

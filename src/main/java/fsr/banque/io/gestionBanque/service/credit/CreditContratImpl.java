@@ -1,9 +1,7 @@
 package fsr.banque.io.gestionBanque.service.credit;
 
 import fsr.banque.io.gestionBanque.dao.CreditsDAO;
-import fsr.banque.io.gestionBanque.exceptions.InvalidAmountException;
-import fsr.banque.io.gestionBanque.exceptions.InvalidBalanceException;
-import fsr.banque.io.gestionBanque.exceptions.InvalidPayementException;
+import fsr.banque.io.gestionBanque.exceptions.*;
 import fsr.banque.io.gestionBanque.models.Compte;
 import fsr.banque.io.gestionBanque.models.Credits;
 import fsr.banque.io.gestionBanque.service.compte.CompteContrat;
@@ -57,11 +55,16 @@ public class CreditContratImpl implements CreditContrat{
 
     @Transactional
     @Override
-    public Credits reglerUneMensualite(Long idCredit, BigDecimal montantApayer) throws Exception {
+    public Credits reglerUneMensualite(Long idCredit, BigDecimal montantApayer) throws InvalidAmountException, InvalidPayementException, InvalidBalanceException, InvalidCreditException, InvalidAccountException {
 
         Credits credit = findUnCredit(idCredit);
 
         Compte compte = credit.getCompteCredit();
+
+        if (!compte.isEtatCompte()){
+            throw new InvalidAccountException("Compte n'est plus disponible veuillez contacter votre agence");
+        }
+
         BigDecimal soldeCompte = compte.getSoldeCompte();
         BigDecimal resteSolde = soldeCompte.subtract(montantApayer);
         BigDecimal zero = new BigDecimal(0);
@@ -123,8 +126,8 @@ public class CreditContratImpl implements CreditContrat{
     }
 
     @Override
-    public Credits findUnCredit(Long id) {
-        return creditsDAO.getById(id);
+    public Credits findUnCredit(Long id) throws InvalidCreditException {
+        return creditsDAO.findById(id).orElseThrow(()->new InvalidCreditException("Credit Introuvable Veuillez saisir un numero credit valide"));
     }
 
 

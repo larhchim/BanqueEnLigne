@@ -35,14 +35,16 @@ public class RetraitContratImpl implements RetraitContrat {
 
     @Transactional
     @Override
-    public Retrait createNewRetrait(Retrait retrait) throws Exception {
+    public Retrait createNewRetrait(Retrait retrait) throws InvalidAccountException, InvalidAmountException,InvalidBalanceException{
 
         Compte compte = retrait.getCompteRetrait();
 
         if(!retrait.getCompteRetrait().isEtatCompte()){
             throw new InvalidAccountException("Compte n'est plus disponible veuillez contacter votre agence");
-        }else if ( retrait.getMontantRetrait().longValue() <=0 ){
-            throw new InvalidAmountException("Montant specifié null et/ou negative");
+        }else if ( retrait.getMontantRetrait().longValue() <=0 || retrait.getMontantRetrait().longValue() < 100 ){
+            throw new InvalidAmountException("Montant specifié null et/ou negative et/ou Montant retrait inferieure à 100");
+        }else if( retrait.getMontantRetrait().doubleValue() % 100 != 0 ){
+            throw new InvalidAmountException("Montant specifié ne peut pas etre retiré du GAB(Guichet automatique bancaire) veuillez specifier un montant sans centimes ex:100$,1000$...");
         }else {
 
             if (compte.getSoldeCompte().subtract(retrait.getMontantRetrait()).compareTo(BigDecimal.ZERO) == 1){

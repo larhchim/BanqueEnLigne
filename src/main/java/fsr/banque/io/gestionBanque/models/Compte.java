@@ -163,6 +163,14 @@ public class Compte implements Serializable {
         this.retraitList = retraitList;
     }
 
+    public List<Credits> getCreditsList() {
+        return creditsList;
+    }
+
+    public void setCreditsList(List<Credits> creditsList) {
+        this.creditsList = creditsList;
+    }
+
     /**
      * @return Chaines de caracteres des infos sur Compte
      */

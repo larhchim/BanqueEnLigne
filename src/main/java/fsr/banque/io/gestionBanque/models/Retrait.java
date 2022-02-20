@@ -23,7 +23,7 @@ public class Retrait implements Serializable {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "WITHDRAWAL_GEN")
     private Long idRetrait;
 
-    @DecimalMin(value = "0.0",message = "Veuillez specifier un Montant Retrait superieure ou egale à zero")
+    @DecimalMin(value = "100.0",message = "Veuillez specifier un Montant Retrait superieure ou egale à 100")
     private BigDecimal montantRetrait;
 
     @JsonProperty(access =JsonProperty.Access.READ_ONLY)
@@ -32,7 +32,7 @@ public class Retrait implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "numeroCompte")
-    @JsonIgnore
+    @JsonProperty(access =JsonProperty.Access.WRITE_ONLY)
     private Compte compteRetrait;
 
     /**

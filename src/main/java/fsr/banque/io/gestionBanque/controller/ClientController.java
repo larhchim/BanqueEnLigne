@@ -1,12 +1,12 @@
 package fsr.banque.io.gestionBanque.controller;
 
 import fsr.banque.io.gestionBanque.dto.CreditDTO;
-import fsr.banque.io.gestionBanque.exceptions.InvalidAccountException;
-import fsr.banque.io.gestionBanque.exceptions.InvalidAmountException;
-import fsr.banque.io.gestionBanque.exceptions.InvalidMensualiteException;
-import fsr.banque.io.gestionBanque.exceptions.InvalidSwitchCaseException;
+import fsr.banque.io.gestionBanque.dto.MensualiteDTO;
+import fsr.banque.io.gestionBanque.dto.RetraitDTO;
+import fsr.banque.io.gestionBanque.exceptions.*;
 import fsr.banque.io.gestionBanque.models.Compte;
 import fsr.banque.io.gestionBanque.models.Credits;
+import fsr.banque.io.gestionBanque.models.Retrait;
 import fsr.banque.io.gestionBanque.service.compte.CompteContrat;
 import fsr.banque.io.gestionBanque.service.credit.CreditConsommation;
 import fsr.banque.io.gestionBanque.service.credit.CreditContrat;
@@ -159,6 +159,75 @@ public class ClientController {
         }
 
     }
+
+
+    @PostMapping(value = "/reglerMensualite",produces = "application/json",consumes = "application/json")
+    public ResponseEntity<Object> reglerUneMensualite(@Valid @RequestBody MensualiteDTO mensualiteDTO,BindingResult bindingResult){
+
+        Map<String,String> error = new HashMap<>();
+
+        try {
+
+            return new ResponseEntity<>(creditContrat.reglerUneMensualite(mensualiteDTO.getIdCredit(), mensualiteDTO.getMensualite()),HttpStatus.OK);
+
+        } catch (InvalidAmountException | InvalidPayementException | InvalidBalanceException | InvalidCreditException | InvalidAccountException e) {
+
+            if (bindingResult.hasErrors()){
+
+                for (FieldError fd:bindingResult.getFieldErrors()) {
+                    error.put(fd.getField(), fd.getDefaultMessage());
+                }
+
+                error.put("message",e.toString());
+                return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
+
+            }else {
+                error.put("message",e.toString());
+                return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
+            }
+
+        }
+
+    }
+
+
+    @PostMapping(value = "/debiter",consumes = "application/json",produces = "application/json")
+    public ResponseEntity<Object> debiterUneSomme(@Valid @RequestBody RetraitDTO retraitDTO, BindingResult bindingResult){
+
+
+        try {
+
+            Retrait retrait = new Retrait();
+
+            retrait.setMontantRetrait(retraitDTO.getMontantRetrait());
+            retrait.setCompteRetrait(compteContrat.findLeCompte(retraitDTO.getIdCompteRetrait()));
+
+            return new ResponseEntity<>(retraitContrat.createNewRetrait(retrait),HttpStatus.OK);
+
+        } catch (InvalidAccountException | InvalidAmountException | InvalidBalanceException e) {
+
+            Map<String,String> error = new HashMap<>();
+
+            if (bindingResult.hasErrors()){
+
+                for (FieldError fd:bindingResult.getFieldErrors()) {
+                    error.put(fd.getField(), fd.getDefaultMessage());
+                }
+
+                error.put("message",e.toString());
+                return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
+
+            }else {
+                error.put("message",e.toString());
+                return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
+            }
+
+        }
+
+    }
+
+
+
 
 
 
