@@ -236,7 +236,7 @@ public class ClientController {
 
             return new ResponseEntity<>(compteContrat.disactivateAccount(compteDTO.getNumeroCompte(),compteDTO.getMotDePasse(),compteDTO.getConfirmation()),HttpStatus.OK);
 
-        } catch (InvalidAccountException | InvalidPasswordException | InvalidConfirmationException | InvalidAdminDeletionException e) {
+        } catch (InvalidAccountException | InvalidPasswordException | InvalidConfirmationException | InvalidAdminDeletionException | InvalidHashPasswordException e) {
 
             Map<String,String> error = new HashMap<>();
 

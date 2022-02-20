@@ -1,11 +1,9 @@
 package fsr.banque.io.gestionBanque.service.compte;
 
 import fsr.banque.io.gestionBanque.dao.CompteDAO;
-import fsr.banque.io.gestionBanque.exceptions.InvalidAccountException;
-import fsr.banque.io.gestionBanque.exceptions.InvalidAdminDeletionException;
-import fsr.banque.io.gestionBanque.exceptions.InvalidConfirmationException;
-import fsr.banque.io.gestionBanque.exceptions.InvalidPasswordException;
+import fsr.banque.io.gestionBanque.exceptions.*;
 import fsr.banque.io.gestionBanque.models.Compte;
+import fsr.banque.io.gestionBanque.service.security.HashPasswordContrat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,11 +17,11 @@ import java.util.List;
 public class CompteContratImpl implements CompteContrat{
 
     private CompteDAO compteDAO;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private HashPasswordContrat hashPasswordContrat;
 
     @Autowired
-    public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    public void setHashPasswordContrat(HashPasswordContrat hashPasswordContrat) {
+        this.hashPasswordContrat = hashPasswordContrat;
     }
 
     @Autowired
@@ -65,20 +63,20 @@ public class CompteContratImpl implements CompteContrat{
 
     @Transactional
     @Override
-    public Compte disactivateAccount(Long idCompte, String motDePasse, String confirmation) throws InvalidAccountException, InvalidPasswordException, InvalidConfirmationException, InvalidAdminDeletionException {
+    public Compte disactivateAccount(Long idCompte, String motDePasse, String confirmation) throws InvalidAccountException, InvalidPasswordException, InvalidConfirmationException, InvalidAdminDeletionException, InvalidHashPasswordException {
 
         Compte compte = findLeCompte(idCompte);
         String deletion = "Je confirme la suppression de mon compte";
 
-        System.out.println("****db****");
+        System.out.println("****db**** Le mot de passe dans data base");
         System.out.println(compte.getMotDePasse());
         System.out.println("****received****");
         System.out.println("le mot de passe recu est :"+motDePasse);
-        System.out.println(bCryptPasswordEncoder.encode(motDePasse));
-        System.out.println(compte.getMotDePasse().matches(bCryptPasswordEncoder.encode(motDePasse)));
+        System.out.println("le mot de passe recu crypté:***");
+        System.out.println(hashPasswordContrat.hashPassword(motDePasse));
 
 
-        if ( !compte.getMotDePasse().matches(bCryptPasswordEncoder.encode(motDePasse)) ){
+        if ( !compte.getMotDePasse().equals(hashPasswordContrat.hashPassword(motDePasse)) ){
             throw new InvalidPasswordException("Mot de passe incorrect Veuillez saisir votre mot de passe");
         }else if( !deletion.equals(confirmation) ){
             throw new InvalidConfirmationException("La phrase de confirmation est erronée Veuillez taper: 'Je confirme la suppression de mon compte' en respectant les miniscules et majiscules ");
