@@ -2,6 +2,9 @@ package fsr.banque.io.gestionBanque.service.compte;
 
 import fsr.banque.io.gestionBanque.dao.CompteDAO;
 import fsr.banque.io.gestionBanque.exceptions.InvalidAccountException;
+import fsr.banque.io.gestionBanque.exceptions.InvalidAdminDeletionException;
+import fsr.banque.io.gestionBanque.exceptions.InvalidConfirmationException;
+import fsr.banque.io.gestionBanque.exceptions.InvalidPasswordException;
 import fsr.banque.io.gestionBanque.models.Compte;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -62,11 +65,30 @@ public class CompteContratImpl implements CompteContrat{
 
     @Transactional
     @Override
-    public Compte disactivateAccount(Long idCompte, String motDePasse, String confirmation) throws InvalidAccountException {
+    public Compte disactivateAccount(Long idCompte, String motDePasse, String confirmation) throws InvalidAccountException, InvalidPasswordException, InvalidConfirmationException, InvalidAdminDeletionException {
 
         Compte compte = findLeCompte(idCompte);
+        String deletion = "Je confirme la suppression de mon compte";
 
-        return null;
+        System.out.println("****db****");
+        System.out.println(compte.getMotDePasse());
+        System.out.println("****received****");
+        System.out.println("le mot de passe recu est :"+motDePasse);
+        System.out.println(bCryptPasswordEncoder.encode(motDePasse));
+        System.out.println(compte.getMotDePasse().matches(bCryptPasswordEncoder.encode(motDePasse)));
+
+
+        if ( !compte.getMotDePasse().matches(bCryptPasswordEncoder.encode(motDePasse)) ){
+            throw new InvalidPasswordException("Mot de passe incorrect Veuillez saisir votre mot de passe");
+        }else if( !deletion.equals(confirmation) ){
+            throw new InvalidConfirmationException("La phrase de confirmation est erronée Veuillez taper: 'Je confirme la suppression de mon compte' en respectant les miniscules et majiscules ");
+        }else if( compte.getTypeCompte().equals(Compte.TypeCompte.ADMIN) ){
+            throw new InvalidAdminDeletionException("Vous ne pouvez pas supprimer un compte Admin");
+        }else {
+            compte.setEtatCompte(false);
+        }
+
+        return updateAccount(compte,compte.getNumeroCompte());
     }
 
 }

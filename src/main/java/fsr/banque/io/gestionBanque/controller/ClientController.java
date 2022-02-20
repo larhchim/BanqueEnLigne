@@ -1,5 +1,6 @@
 package fsr.banque.io.gestionBanque.controller;
 
+import fsr.banque.io.gestionBanque.dto.CompteDTO;
 import fsr.banque.io.gestionBanque.dto.CreditDTO;
 import fsr.banque.io.gestionBanque.dto.MensualiteDTO;
 import fsr.banque.io.gestionBanque.dto.RetraitDTO;
@@ -228,7 +229,34 @@ public class ClientController {
 
 
 
+    @PostMapping(value = "/deleteAccount",consumes = "application/json",produces = "application/json")
+    public ResponseEntity<Object> supprimerLeCompte(@Valid @RequestBody CompteDTO compteDTO,BindingResult bindingResult){
 
+        try {
+
+            return new ResponseEntity<>(compteContrat.disactivateAccount(compteDTO.getNumeroCompte(),compteDTO.getMotDePasse(),compteDTO.getConfirmation()),HttpStatus.OK);
+
+        } catch (InvalidAccountException | InvalidPasswordException | InvalidConfirmationException | InvalidAdminDeletionException e) {
+
+            Map<String,String> error = new HashMap<>();
+
+            if (bindingResult.hasErrors()){
+
+                for (FieldError fd:bindingResult.getFieldErrors()) {
+                    error.put(fd.getField(), fd.getDefaultMessage());
+                }
+
+                error.put("message",e.toString());
+                return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
+
+            }else {
+                error.put("message",e.toString());
+                return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
+            }
+
+        }
+
+    }
 
 
 
