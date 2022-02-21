@@ -2,6 +2,7 @@ package fsr.banque.io.gestionBanque.service.utilisateur;
 
 import fsr.banque.io.gestionBanque.dao.UtilisateurDAO;
 import fsr.banque.io.gestionBanque.dto.UtilisateurDTO;
+import fsr.banque.io.gestionBanque.exceptions.InvalidEmailException;
 import fsr.banque.io.gestionBanque.exceptions.InvalidGenderException;
 import fsr.banque.io.gestionBanque.models.Utilisateur;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,11 @@ public class UtilisateurContratImpl implements UtilisateurContrat{
 
     @Transactional
     @Override
-    public Utilisateur saveUser(UtilisateurDTO utilisateur) throws InvalidGenderException {
+    public Utilisateur saveUser(UtilisateurDTO utilisateur) throws InvalidGenderException, InvalidEmailException {
+
+        if (findUserByEmail(utilisateur.getEmailUtilisateur())!=null){
+            throw new InvalidEmailException("Email deja existe dans la liste des utilisateurs merci de specifier un autre email");
+        }
 
         Utilisateur user = new Utilisateur();
 
