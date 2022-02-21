@@ -2,6 +2,7 @@ package fsr.banque.io.gestionBanque.service.compte;
 
 import fsr.banque.io.gestionBanque.dao.CompteDAO;
 import fsr.banque.io.gestionBanque.exceptions.InvalidAmountException;
+import fsr.banque.io.gestionBanque.exceptions.InvalidUserException;
 import fsr.banque.io.gestionBanque.models.Compte;
 import fsr.banque.io.gestionBanque.models.Utilisateur;
 import fsr.banque.io.gestionBanque.service.utilisateur.UtilisateurContrat;
@@ -33,7 +34,7 @@ public class CompteEpargne extends CompteAbstraction{
 
     @Transactional
     @Override
-    public Compte createAccount(Compte compte, Long userId) throws Exception {
+    public Compte createAccount(Compte compte, Long userId) throws InvalidAmountException, InvalidUserException {
 
         Utilisateur utilisateur = user.findTheUser(userId);
         compte.setDateCreation(new Date());

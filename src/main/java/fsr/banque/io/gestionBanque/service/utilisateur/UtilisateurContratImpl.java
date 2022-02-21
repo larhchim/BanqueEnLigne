@@ -4,6 +4,7 @@ import fsr.banque.io.gestionBanque.dao.UtilisateurDAO;
 import fsr.banque.io.gestionBanque.dto.UtilisateurDTO;
 import fsr.banque.io.gestionBanque.exceptions.InvalidEmailException;
 import fsr.banque.io.gestionBanque.exceptions.InvalidGenderException;
+import fsr.banque.io.gestionBanque.exceptions.InvalidUserException;
 import fsr.banque.io.gestionBanque.models.Utilisateur;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,7 +32,7 @@ public class UtilisateurContratImpl implements UtilisateurContrat{
 
     @Transactional
     @Override
-    public Utilisateur saveUser(UtilisateurDTO utilisateur) throws InvalidGenderException, InvalidEmailException {
+    public Utilisateur saveUser(UtilisateurDTO utilisateur) throws InvalidGenderException, InvalidEmailException, InvalidUserException {
 
         if (findUserByEmail(utilisateur.getEmailUtilisateur())!=null){
             throw new InvalidEmailException("Email deja existe dans la liste des utilisateurs merci de specifier un autre email");
@@ -50,8 +51,10 @@ public class UtilisateurContratImpl implements UtilisateurContrat{
     @Transactional
     @Override
     public Utilisateur updateUser(Utilisateur utilisateur, Long userId) {
+
         utilisateur.setIdUtilisateur(userId);
         return userDAO.save(utilisateur);
+
     }
 
     @Transactional
@@ -62,14 +65,16 @@ public class UtilisateurContratImpl implements UtilisateurContrat{
 
     @Transactional
     @Override
-    public Utilisateur findTheUser(Long userId) {
-        return userDAO.getById(userId);
+    public Utilisateur findTheUser(Long userId) throws InvalidUserException {
+        return userDAO.findById(userId).orElseThrow(() -> new InvalidUserException("Utilisateur introuvable avec l'id "+userId+" Veuillez inserez un numero valide"));
     }
 
     @Transactional
     @Override
-    public Utilisateur findUserByEmail(String email) {
-        return userDAO.findUtilisateurByEmailUtilisateur(email);
+    public Utilisateur findUserByEmail(String email) throws InvalidUserException {
+        Utilisateur utilisateur = userDAO.findUtilisateurByEmailUtilisateur(email);
+        if (utilisateur == null) throw new InvalidUserException("Utilisateur introuvable avec "+email+" Veuillez saisir un email valide");
+        return utilisateur;
     }
 
     @Override

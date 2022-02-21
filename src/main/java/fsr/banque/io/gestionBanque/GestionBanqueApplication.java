@@ -129,12 +129,8 @@ public class GestionBanqueApplication {
 /*
 		Compte compte1 = new Compte();
 
-		compte1.setEtatCompte(true);
 		compte1.setSoldeCompte(new BigDecimal("18000000"));
-		compte1.setDateCreation(new Date());
 		compte1.setMotDePasse(getBCR().encode("789456123"));
-
-
 
 		CompteCourant d = (CompteCourant) fabriqueCompte.generateAccount(Compte.TypeCompte.COURANT);
 		d.createAccount(compte1,user.findUserByEmail("jadid_ismail@gmail.com").getIdUtilisateur());
