@@ -31,8 +31,8 @@ public class CompteContratImpl implements CompteContrat{
 
     @Transactional
     @Override
-    public Page<Compte> findCompteParMotCle(String mc, Long aId, int page, int size) {
-        return compteDAO.findCompteParMotCle(mc,aId, PageRequest.of(page, size));
+    public Page<Compte> findCompteParMotCle(String mc, int page, int size) {
+        return compteDAO.findCompteParMotCle(mc, PageRequest.of(page, size));
     }
 
     @Transactional

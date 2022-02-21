@@ -13,14 +13,12 @@ import fsr.banque.io.gestionBanque.service.security.HashPasswordContrat;
 import fsr.banque.io.gestionBanque.service.utilisateur.UtilisateurContrat;
 import fsr.banque.io.gestionBanque.service.virement.VirementContrat;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -167,9 +165,24 @@ public class AdminController {
     }
 
 
+    @GetMapping(path="/searchUsers",produces= {"application/json"})
+    public Page<Utilisateur> chercherUtilisateurs(
+            @RequestParam(name = "mc",defaultValue = "") String mc,
+            @RequestParam(name = "page",defaultValue = "0") int page,
+            @RequestParam(name = "size",defaultValue = "5") int size
+    ) {
+        return utilisateurContrat.findUserByValue("%"+mc+"%",page,size);
+    }
 
 
-
+    @GetMapping(path="/searchComptes",produces= {"application/json"})
+    public Page<Compte> chercherComptes(
+            @RequestParam(name = "mc1",defaultValue = "") String mc1,
+            @RequestParam(name = "page",defaultValue = "0") int page,
+            @RequestParam(name = "size",defaultValue = "5") int size
+    ) {
+        return compteContrat.findCompteParMotCle("%"+mc1+"%",page,size);
+    }
 
 
 }
