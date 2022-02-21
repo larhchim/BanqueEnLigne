@@ -1,6 +1,8 @@
 package fsr.banque.io.gestionBanque.service.utilisateur;
 
 import fsr.banque.io.gestionBanque.dao.UtilisateurDAO;
+import fsr.banque.io.gestionBanque.dto.UtilisateurDTO;
+import fsr.banque.io.gestionBanque.exceptions.InvalidGenderException;
 import fsr.banque.io.gestionBanque.models.Utilisateur;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,8 +30,16 @@ public class UtilisateurContratImpl implements UtilisateurContrat{
 
     @Transactional
     @Override
-    public Utilisateur saveUser(Utilisateur utilisateur) {
-        return userDAO.save(utilisateur);
+    public Utilisateur saveUser(UtilisateurDTO utilisateur) throws InvalidGenderException {
+
+        Utilisateur user = new Utilisateur();
+
+        user.setEmailUtilisateur(utilisateur.getEmailUtilisateur());
+        user.setNomUtilisateur(utilisateur.getNomUtilisateur());
+        user.setPrenomUtilisateur(utilisateur.getPrenomUtilisateur());
+        user.setSexeUtilisateur(genderUserFix(String.valueOf(utilisateur.getSexeUtilisateur())));
+
+        return userDAO.save(user);
     }
 
     @Transactional
@@ -55,6 +65,19 @@ public class UtilisateurContratImpl implements UtilisateurContrat{
     @Override
     public Utilisateur findUserByEmail(String email) {
         return userDAO.findUtilisateurByEmailUtilisateur(email);
+    }
+
+    @Override
+    public Utilisateur.Gender genderUserFix(String str) throws InvalidGenderException {
+
+        switch (str){
+
+            case "M" : return Utilisateur.Gender.MALE;
+            case "F" : return Utilisateur.Gender.FEMALE;
+            case "U" : return Utilisateur.Gender.UNKNOWN;
+            default: throw new InvalidGenderException("Veuillez spécifier un genre Utilisateur valide en insérant un Caractère en majiscule ex: M(MALE) , F(FEMALE) , U(UKNOWN)");
+
+        }
     }
 
 }
