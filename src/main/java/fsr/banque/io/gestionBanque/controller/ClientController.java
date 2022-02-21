@@ -1,13 +1,11 @@
 package fsr.banque.io.gestionBanque.controller;
 
-import fsr.banque.io.gestionBanque.dto.CompteDTO;
-import fsr.banque.io.gestionBanque.dto.CreditDTO;
-import fsr.banque.io.gestionBanque.dto.MensualiteDTO;
-import fsr.banque.io.gestionBanque.dto.RetraitDTO;
+import fsr.banque.io.gestionBanque.dto.*;
 import fsr.banque.io.gestionBanque.exceptions.*;
 import fsr.banque.io.gestionBanque.models.Compte;
 import fsr.banque.io.gestionBanque.models.Credits;
 import fsr.banque.io.gestionBanque.models.Retrait;
+import fsr.banque.io.gestionBanque.models.Virement;
 import fsr.banque.io.gestionBanque.service.compte.CompteContrat;
 import fsr.banque.io.gestionBanque.service.credit.CreditConsommation;
 import fsr.banque.io.gestionBanque.service.credit.CreditContrat;
@@ -258,6 +256,36 @@ public class ClientController {
 
     }
 
+
+    @PostMapping(value = "/Virement",produces = "application/json",consumes = "application/json")
+    public ResponseEntity<Object> passerUnVirement(@Valid @RequestBody VirementDTO virementDTO,BindingResult bindingResult){
+
+        Virement virement = new Virement();
+        virement.setMontant(virementDTO.getMontant());
+        try {
+            return new ResponseEntity<>(virementContrat.createNewVirement(virement,virementDTO.getNumeroCompteEmetteur(),virementDTO.getNumeroCompteRecepteur()),HttpStatus.OK);
+        } catch (InvalidAccountException | InvalidAmountException | InvalidBalanceException e) {
+
+            Map<String,String> error = new HashMap<>();
+
+            if (bindingResult.hasErrors()){
+
+                for (FieldError fd:bindingResult.getFieldErrors()) {
+                    error.put(fd.getField(), fd.getDefaultMessage());
+                }
+
+                error.put("message",e.toString());
+                return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
+
+            }else {
+                error.put("message",e.toString());
+                return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
+            }
+
+        }
+
+
+    }
 
 
 

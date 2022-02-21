@@ -41,7 +41,11 @@ public class VirementContratImpl implements VirementContrat{
 
     @Transactional
     @Override
-    public Virement createNewVirement(Virement virement, Long emetteur, Long recepteur) throws Exception {
+    public Virement createNewVirement(Virement virement, Long emetteur, Long recepteur) throws InvalidAccountException,InvalidAmountException,InvalidBalanceException {
+
+        if(emetteur.compareTo(recepteur)==0) {
+            throw new InvalidAccountException("Virement Impossible Compte emetteur et Compte Recepteur ont le meme numero de Compte Veuillez specifier un numero de Compte different");
+        }
 
         Compte compteEmetteur = compteContrat.findLeCompte(emetteur);
         Compte compteRecepteur = compteContrat.findLeCompte(recepteur);
@@ -51,14 +55,14 @@ public class VirementContratImpl implements VirementContrat{
             throw new InvalidAccountException("Votre Compte n'est plus disponible pour l'operation veuillez contacter votre agence");
         }else if(!compteRecepteur.isEtatCompte()){
             throw new InvalidAccountException("Compte Destinataire n'est plus disponible pour l'operation veuillez contacter votre agence");
-        }else {
+        }else{
 
             virement.setNumeroCompteRecepteur(recepteur);
             virement.setCompteVirement(compteEmetteur);
             virement.setDateVirement(new Date());
 
-            if ( virement.getMontant().longValue() <=0 ){
-                throw new InvalidAmountException("Montant specifié null et/ou negative");
+            if ( virement.getMontant().longValue() <=0 || virement.getMontant().longValue()< 100){
+                throw new InvalidAmountException("Montant specifié null et/ou negative et/ou inférieure à 100");
             }
 
             if ( compteEmetteur.getSoldeCompte().compareTo( virement.getMontant().subtract(BigDecimal.ONE) ) == 1 ){
