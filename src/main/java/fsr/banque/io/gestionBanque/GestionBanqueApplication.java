@@ -78,7 +78,7 @@ public class GestionBanqueApplication {
 	public void LoadOnceFinishAll(){
 
 		/**
-		 * Adding new Users to the data base
+		 * Adding new Users to the data base Recette
 		 */
 
 
